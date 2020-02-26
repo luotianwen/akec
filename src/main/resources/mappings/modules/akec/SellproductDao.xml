@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.SellproductDao">
+    
+	<sql id="sellproductColumns">
+		a.material_desc AS "materialDesc",
+		a.bar_code AS "barCode",
+		a.material_specification_desc AS "materialSpecificationDesc",
+		a.type_code AS "typeCode",
+		a.series AS "series",
+		a.batch_code AS "batchCode",
+		a.dealer_code AS "dealerCode",
+		a.dealer_name AS "dealerName",
+		a.business_dealer_code AS "businessDealerCode",
+		a.business_dealer_name AS "businessDealerName",
+		a.individualcode AS "individualcode",
+		a.proudct_code AS "proudctCode",
+		a.material_code AS "materialCode",
+		a.comments AS "comments",
+		a.sale_type AS "saleType"
+	</sql>
+	
+	<sql id="sellproductJoins">
+	</sql>
+    
+	<select id="get" resultType="Sellproduct">
+		SELECT 
+			<include refid="sellproductColumns"/>
+		FROM t_sellproduct a
+		<include refid="sellproductJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Sellproduct">
+		SELECT 
+			<include refid="sellproductColumns"/>
+		FROM t_sellproduct a
+		<include refid="sellproductJoins"/>
+		<where>
+			
+			<if test="materialDesc != null and materialDesc != ''">
+				AND a.material_desc = #{materialDesc}
+			</if>
+			<if test="barCode != null and barCode != ''">
+				AND a.bar_code = #{barCode}
+			</if>
+			<if test="individualcode != null and individualcode != ''">
+				AND a.individualcode = #{individualcode}
+			</if>
+			<if test="proudctCode != null and proudctCode != ''">
+				AND a.proudct_code = #{proudctCode}
+			</if>
+			<if test="materialCode != null and materialCode != ''">
+				AND a.material_code = #{materialCode}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Sellproduct">
+		SELECT 
+			<include refid="sellproductColumns"/>
+		FROM t_sellproduct a
+		<include refid="sellproductJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_sellproduct(
+			material_desc,
+			bar_code,
+			material_specification_desc,
+			type_code,
+			series,
+			batch_code,
+			dealer_code,
+			dealer_name,
+			business_dealer_code,
+			business_dealer_name,
+			individualcode,
+			proudct_code,
+			material_code,
+			comments,
+			sale_type
+		) VALUES (
+			#{materialDesc},
+			#{barCode},
+			#{materialSpecificationDesc},
+			#{typeCode},
+			#{series},
+			#{batchCode},
+			#{dealerCode},
+			#{dealerName},
+			#{businessDealerCode},
+			#{businessDealerName},
+			#{individualcode},
+			#{proudctCode},
+			#{materialCode},
+			#{comments},
+			#{saleType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_sellproduct SET 	
+			material_desc = #{materialDesc},
+			bar_code = #{barCode},
+			material_specification_desc = #{materialSpecificationDesc},
+			type_code = #{typeCode},
+			series = #{series},
+			batch_code = #{batchCode},
+			dealer_code = #{dealerCode},
+			dealer_name = #{dealerName},
+			business_dealer_code = #{businessDealerCode},
+			business_dealer_name = #{businessDealerName},
+			individualcode = #{individualcode},
+			proudct_code = #{proudctCode},
+			material_code = #{materialCode},
+			comments = #{comments},
+			sale_type = #{saleType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_sellproduct
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

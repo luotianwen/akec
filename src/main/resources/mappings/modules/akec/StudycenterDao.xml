@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.StudycenterDao">
+    
+	<sql id="studycenterColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.href AS "href",
+		a.seqno AS "seqno",
+		a.status AS "status",
+		a.release_date AS "releaseDate",
+		a.kkid AS "kk.id",
+		b.name AS "kk.name"
+	</sql>
+	
+	<sql id="studycenterJoins">
+		LEFT JOIN t_knowleger_kind b ON b.id = a.kkid
+	</sql>
+    
+	<select id="get" resultType="Studycenter">
+		SELECT 
+			<include refid="studycenterColumns"/>
+		FROM t_studycenter a
+		<include refid="studycenterJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Studycenter">
+		SELECT 
+			<include refid="studycenterColumns"/>
+		FROM t_studycenter a
+		<include refid="studycenterJoins"/>
+		<where>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="beginReleaseDate != null and endReleaseDate != null and beginReleaseDate != '' and endReleaseDate != ''">
+				AND a.release_date BETWEEN #{beginReleaseDate} AND #{endReleaseDate}
+			</if>
+			<if test="kk != null and kk.id != null and kk.id != ''">
+				AND a.kkid = #{kk.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Studycenter">
+		SELECT 
+			<include refid="studycenterColumns"/>
+		FROM t_studycenter a
+		<include refid="studycenterJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_studycenter(
+			id,
+			title,
+			href,
+			seqno,
+			status,
+			release_date,
+			kkid
+		) VALUES (
+			#{id},
+			#{title},
+			#{href},
+			#{seqno},
+			#{status},
+			#{releaseDate},
+			#{kk.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_studycenter SET 	
+			title = #{title},
+			href = #{href},
+			seqno = #{seqno},
+			status = #{status},
+			release_date = #{releaseDate},
+			kkid = #{kk.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_studycenter
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE kkid = #{kk.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

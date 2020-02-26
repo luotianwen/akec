@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.ReportStandbookProductDetailDao">
+    
+	<sql id="reportStandbookProductDetailColumns">
+		a.id AS "id",
+		a.report_id AS "report.Id",
+		a.product_id AS "productId",
+		a.individualcode AS "individualcode",
+		a.integral AS "integral",
+		a.note AS "note",
+		a.is_record_unit AS "isRecordUnit",
+		a.is_verify_individualcode AS "isVerifyIndividualcode",
+		a.scan_code AS "scanCode",
+		a.produce_date AS "produceDate",
+		a.outdate AS "outdate",
+		b.type AS "report.type"
+	</sql>
+	
+	<sql id="reportStandbookProductDetailJoins">
+		LEFT JOIN t_report_standbook b ON b.id = a.report_id
+	</sql>
+    
+	<select id="get" resultType="ReportStandbookProductDetail">
+		SELECT 
+			<include refid="reportStandbookProductDetailColumns"/>
+		FROM t_report_standbook_product_detail a
+		<include refid="reportStandbookProductDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ReportStandbookProductDetail">
+		SELECT 
+			<include refid="reportStandbookProductDetailColumns"/>
+		FROM t_report_standbook_product_detail a
+		<include refid="reportStandbookProductDetailJoins"/>
+		<where>
+			
+			<if test="report != null and report.Id != null and report.Id != ''">
+				AND a.report_id = #{report.Id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReportStandbookProductDetail">
+		SELECT 
+			<include refid="reportStandbookProductDetailColumns"/>
+		FROM t_report_standbook_product_detail a
+		<include refid="reportStandbookProductDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_report_standbook_product_detail(
+			id,
+			report_id,
+			product_id,
+			individualcode,
+			integral,
+			note,
+			is_record_unit,
+			is_verify_individualcode,
+			scan_code,
+			produce_date,
+			outdate
+		) VALUES (
+			#{id},
+			#{report.Id},
+			#{productId},
+			#{individualcode},
+			#{integral},
+			#{note},
+			#{isRecordUnit},
+			#{isVerifyIndividualcode},
+			#{scanCode},
+			#{produceDate},
+			#{outdate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_report_standbook_product_detail SET 	
+			product_id = #{productId},
+			individualcode = #{individualcode},
+			integral = #{integral},
+			note = #{note},
+			is_record_unit = #{isRecordUnit},
+			is_verify_individualcode = #{isVerifyIndividualcode},
+			scan_code = #{scanCode},
+			produce_date = #{produceDate},
+			outdate = #{outdate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_report_standbook_product_detail
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE report_id = #{report.Id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

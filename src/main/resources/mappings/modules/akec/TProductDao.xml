@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.TProductDao">
+    
+	<sql id="tProductColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.material_code AS "materialCode",
+		a.material_desc AS "materialDesc",
+		a.bar_code AS "barCode",
+		a.material_spe_desc AS "materialSpeDesc",
+		a.base_type_id AS "baseTypeId",
+		a.type_name AS "typeName",
+		a.base_series_id AS "baseSeriesId",
+		a.series_name AS "seriesName",
+		a.batch_code AS "batchCode",
+		a.stander_saleprice AS "standerSaleprice",
+		a.integral AS "integral",
+		a.is_record_unit AS "isRecordUnit",
+		a.is_verify_individualcode AS "isVerifyIndividualcode",
+		a.note AS "note",
+		a.status AS "status"
+	</sql>
+	
+	<sql id="tProductJoins">
+	</sql>
+    
+	<select id="get" resultType="TProduct">
+		SELECT 
+			<include refid="tProductColumns"/>
+		FROM t_product a
+		<include refid="tProductJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TProduct">
+		SELECT 
+			<include refid="tProductColumns"/>
+		FROM t_product a
+		<include refid="tProductJoins"/>
+		<where>
+			
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="materialCode != null and materialCode != ''">
+				AND a.material_code = #{materialCode}
+			</if>
+			<if test="barCode != null and barCode != ''">
+				AND a.bar_code = #{barCode}
+			</if>
+			<if test="isRecordUnit != null and isRecordUnit != ''">
+				AND a.is_record_unit = #{isRecordUnit}
+			</if>
+			<if test="isVerifyIndividualcode != null and isVerifyIndividualcode != ''">
+				AND a.is_verify_individualcode = #{isVerifyIndividualcode}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TProduct">
+		SELECT 
+			<include refid="tProductColumns"/>
+		FROM t_product a
+		<include refid="tProductJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_product(
+			id,
+			code,
+			material_code,
+			material_desc,
+			bar_code,
+			material_spe_desc,
+			base_type_id,
+			type_name,
+			base_series_id,
+			series_name,
+			batch_code,
+			stander_saleprice,
+			integral,
+			is_record_unit,
+			is_verify_individualcode,
+			note,
+			status
+		) VALUES (
+			#{id},
+			#{code},
+			#{materialCode},
+			#{materialDesc},
+			#{barCode},
+			#{materialSpeDesc},
+			#{baseTypeId},
+			#{typeName},
+			#{baseSeriesId},
+			#{seriesName},
+			#{batchCode},
+			#{standerSaleprice},
+			#{integral},
+			#{isRecordUnit},
+			#{isVerifyIndividualcode},
+			#{note},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_product SET 	
+			code = #{code},
+			material_code = #{materialCode},
+			material_desc = #{materialDesc},
+			bar_code = #{barCode},
+			material_spe_desc = #{materialSpeDesc},
+			base_type_id = #{baseTypeId},
+			type_name = #{typeName},
+			base_series_id = #{baseSeriesId},
+			series_name = #{seriesName},
+			batch_code = #{batchCode},
+			stander_saleprice = #{standerSaleprice},
+			integral = #{integral},
+			is_record_unit = #{isRecordUnit},
+			is_verify_individualcode = #{isVerifyIndividualcode},
+			note = #{note},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_product
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
