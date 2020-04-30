@@ -19,7 +19,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/akec/sellproduct/">已售产品信息列表</a></li>
-		<shiro:hasPermission name="akec:sellproduct:edit"><li><a href="${ctx}/akec/sellproduct/form">已售产品信息添加</a></li></shiro:hasPermission>
+		<%--<shiro:hasPermission name="akec:sellproduct:edit"><li><a href="${ctx}/akec/sellproduct/form">已售产品信息添加</a></li></shiro:hasPermission>--%>
 	</ul>
 	<form:form id="searchForm" modelAttribute="sellproduct" action="${ctx}/akec/sellproduct/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -43,26 +43,28 @@
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
+		<sys:tableSort id="orderBy" name="orderBy" value="${page.orderBy}" callback="page();"/>
 	</form:form>
 	<sys:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>产品名称</th>
-				<th>条形码</th>
-				<th>产品规格</th>
-				<th>产品类别</th>
-				<th>产品系列</th>
-				<th>产品批号</th>
-				<th>经销商编码</th>
-				<th>经销商名称</th>
-				<th>业务统计伙计编码</th>
+				<th class="sort-column a.material_desc">产品名称</th>
+				<th class="sort-column a.bar_code">条形码</th>
+				<th class="sort-column a.material_specification_desc">产品规格</th>
+				<th class="sort-column a.type_code">产品类别</th>
+				<th class="sort-column a.series">产品系列</th>
+				<th class="sort-column a.batch_code">产品批号</th>
+				<th class="sort-column a.individualcode">产品个体码</th>
+
+				<th class="sort-column a.dealer_code">经销商编码</th>
+				<th class="sort-column a.dealer_name">经销商名称</th>
+				<th class="sort-column a.business_dealer_code">业务统计伙计编码</th>
 				<th>业务统计伙计名称</th>
-				<th>产品个体码</th>
-				<th>产品编码</th>
-				<th>材料编码</th>
+			     <th class="sort-column a.proudct_code">产品编码</th>
+				<th class="sort-column a.material_code">材料编码</th>
 				<th>销售类型</th>
-				<shiro:hasPermission name="akec:sellproduct:edit"><th>操作</th></shiro:hasPermission>
+
 			</tr>
 		</thead>
 		<tbody>
@@ -87,6 +89,10 @@
 					${sellproduct.batchCode}
 				</td>
 				<td>
+						${sellproduct.individualcode}
+				</td>
+
+				<td>
 					${sellproduct.dealerCode}
 				</td>
 				<td>
@@ -98,9 +104,7 @@
 				<td>
 					${sellproduct.businessDealerName}
 				</td>
-				<td>
-					${sellproduct.individualcode}
-				</td>
+
 				<td>
 					${sellproduct.proudctCode}
 				</td>
@@ -110,10 +114,7 @@
 				<td>
 					${sellproduct.saleType}
 				</td>
-				<shiro:hasPermission name="akec:sellproduct:edit"><td>
-    				<a href="${ctx}/akec/sellproduct/form?id=${sellproduct.id}">修改</a>
-					<a href="${ctx}/akec/sellproduct/delete?id=${sellproduct.id}" onclick="return confirmx('确认要删除该已售产品信息吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
+
 			</tr>
 		</c:forEach>
 		</tbody>

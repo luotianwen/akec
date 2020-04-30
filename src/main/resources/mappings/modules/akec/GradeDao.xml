@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.GradeDao">
+    
+	<sql id="gradeColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.level AS "level",
+		a.status AS "status",
+		a.seqno AS "seqno"
+	</sql>
+	
+	<sql id="gradeJoins">
+	</sql>
+    
+	<select id="get" resultType="Grade">
+		SELECT 
+			<include refid="gradeColumns"/>
+		FROM t_grade a
+		<include refid="gradeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Grade">
+		SELECT 
+			<include refid="gradeColumns"/>
+		FROM t_grade a
+		<include refid="gradeJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Grade">
+		SELECT 
+			<include refid="gradeColumns"/>
+		FROM t_grade a
+		<include refid="gradeJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_grade(
+			id,
+			name,
+			level,
+			status,
+			seqno
+		) VALUES (
+			#{id},
+			#{name},
+			#{level},
+			#{status},
+			#{seqno}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_grade SET 	
+			name = #{name},
+			level = #{level},
+			status = #{status},
+			seqno = #{seqno}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_grade
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

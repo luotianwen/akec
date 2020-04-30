@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.ReportStandbookOperationDetailDao">
+    
+	<sql id="reportStandbookOperationDetailColumns">
+		a.id AS "id",
+		a.operate_id AS "operate.id",
+		a.doctor AS "doctor",
+		a.ak_count AS "akCount",
+		a.type AS "type",
+		a.typename AS "typename",
+		a.remarks AS "remarks",
+		b.hospital_name AS "operate.hospitalName"
+	</sql>
+	
+	<sql id="reportStandbookOperationDetailJoins">
+		LEFT JOIN t_report_standbook_operation b ON b.id = a.operate_id
+	</sql>
+    
+	<select id="get" resultType="ReportStandbookOperationDetail">
+		SELECT 
+			<include refid="reportStandbookOperationDetailColumns"/>
+		FROM t_report_standbook_operation_detail a
+		<include refid="reportStandbookOperationDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ReportStandbookOperationDetail">
+		SELECT 
+			<include refid="reportStandbookOperationDetailColumns"/>
+		FROM t_report_standbook_operation_detail a
+		<include refid="reportStandbookOperationDetailJoins"/>
+		<where>
+			
+			<if test="operate != null and operate.id != null and operate.id != ''">
+				AND a.operate_id = #{operate.id}
+			</if>
+			<if test="doctor != null and doctor != ''">
+				AND a.doctor = #{doctor}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReportStandbookOperationDetail">
+		SELECT 
+			<include refid="reportStandbookOperationDetailColumns"/>
+		FROM t_report_standbook_operation_detail a
+		<include refid="reportStandbookOperationDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_report_standbook_operation_detail(
+			id,
+			operate_id,
+			doctor,
+			ak_count,
+			type,
+			typename,
+			remarks
+		) VALUES (
+			#{id},
+			#{operate.id},
+			#{doctor},
+			#{akCount},
+			#{type},
+			#{typename},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_report_standbook_operation_detail SET 	
+			operate_id = #{operate.id},
+			doctor = #{doctor},
+			ak_count = #{akCount},
+			type = #{type},
+			typename = #{typename},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_report_standbook_operation_detail
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE operate_id = #{operate.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

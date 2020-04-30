@@ -15,7 +15,6 @@
 		a.patient_sex AS "patientSex",
 		a.patient_age AS "patientAge",
 		a.surgery_id AS "surgeryId",
-		a.surgery_grade AS "surgeryGrade",
 		a.user_name AS "userName",
 		a.user_id AS "userId",
 		a.type AS "type",
@@ -25,12 +24,14 @@
 		a.suggest AS "suggest",
 		a.update_date AS "updateDate",
 		a.update_admin_name AS "updateAdminName",
-		a.dealer_name AS "dealerName",
+		d.name AS "dealerName",
 		a.patient_name AS "patientName"
 	</sql>
 	
 	<sql id="reportStandbookJoins">
-		LEFT JOIN sys_user u15 ON u15.id = a.user_id
+		LEFT JOIN t_user u15 ON u15.id = a.user_id
+		LEFT JOIN t_dealer d ON u15.dealer_id = d.id
+
 	</sql>
     
 	<select id="get" resultType="ReportStandbook">
@@ -44,6 +45,7 @@
 	<select id="findList" resultType="ReportStandbook">
 		SELECT 
 			<include refid="reportStandbookColumns"/>
+
 		FROM t_report_standbook a
 		<include refid="reportStandbookJoins"/>
 		<where>
@@ -63,17 +65,16 @@
 			<if test="doctorName != null and doctorName != ''">
 				AND a.doctor_name = #{doctorName}
 			</if>
-			<if test="createDate != null and createDate != ''">
-				AND a.create_date = #{createDate}
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
 			</if>
+
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
 			</if>
-			<if test="updateDate != null and updateDate != ''">
-				AND a.update_date = #{updateDate}
-			</if>
+
 			<if test="dealerName != null and dealerName != ''">
-				AND a.dealer_name = #{dealerName}
+				AND d.name = #{dealerName}
 			</if>
 		</where>
 		<choose>
@@ -81,7 +82,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date DESC
 			</otherwise>
 		</choose>
 	</select>
@@ -177,7 +178,56 @@
 			dealer_name = #{dealerName}
 		WHERE id = #{id}
 	</update>
-	
+
+
+
+
+	<select id="queryListReportStandbook"    resultType="ReportStandbook" >
+		SELECT      id,
+		CONVERT(VARCHAR(10),operate_date,120) operateDate,
+		hospital_id AS "hospitalId",
+		hospital_name as hospitalName,
+		province_code AS "provinceCode",
+		province_name AS "provinceName",
+		city_name  AS "cityName",
+		city_code  AS "cityCode",
+		doctor_name AS "doctorName",
+		patient_sex AS "patientSex",
+		patient_age AS "patientAge",
+		surgery_id AS "surgeryId",
+		user_name AS "userName",
+		user_id AS "userId",
+		case  status when '1' then '启用' else '禁用' end status,
+		type,
+		unit_count AS "unitCount",
+		suggest,
+		CONVERT(VARCHAR(100),create_date,20) AS "createDate"
+		FROM t_report_standbook
+		WHERE status = '1'
+		<if test="userId !=null">
+			AND user_id = #{userId}
+		</if>
+		<if test="beginOperateDate !=null and beginOperateDate != '' ">
+			<![CDATA[
+			AND CONVERT(VARCHAR(10),operate_date,120) >= #{beginOperateDate}
+			]]>
+		</if>
+		<if test="endOperateDate !=null and endOperateDate != '' ">
+			<![CDATA[
+			AND CONVERT(VARCHAR(10),operate_date,120) <= #{endOperateDate}
+				]]>
+		</if>
+		<if test="hospitalName !=null  and hospitalName != '' ">
+			AND hospital_name   LIKE  '%'+#{hospitalName}+'%'
+		</if>
+		<if test="doctorName !=null and doctorName != '' ">
+			AND doctor_name LIKE  '%'+#{doctorName}+'%'
+		</if>
+		<if test="surgeryId !=null and surgeryId != '' ">
+			AND surgery_id = #{surgeryId}
+		</if>
+		ORDER BY create_date desc
+	</select>
 	<update id="delete">
 		DELETE FROM t_report_standbook
 		WHERE id = #{id}

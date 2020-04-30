@@ -63,33 +63,20 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="reportStandbook" action="${ctx}/akec/reportStandbook/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<sys:message content="${message}"/>		
+		<sys:message content="${message}"/>
+		<form:hidden path="hospitalId"/>
+		<form:hidden path="provinceCode"/>
+		<form:hidden path="cityCode"/>
 		<div class="control-group">
-			<label class="control-label">报台时间：</label>
+			<label class="control-label">手术日期：</label>
 			<div class="controls">
 				<input name="operateDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${reportStandbook.operateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+					value="<fmt:formatDate value="${reportStandbook.operateDate}" pattern="yyyy-MM-dd"/>"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">医院：</label>
-			<div class="controls">
-				<form:input path="hospitalName" htmlEscape="false" maxlength="100" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">医院：</label>
-			<div class="controls">
-				<form:input path="hospitalId" htmlEscape="false" maxlength="32" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">省：</label>
-			<div class="controls">
-				<form:input path="provinceCode" htmlEscape="false" maxlength="32" class="input-xlarge "/>
-			</div>
-		</div>
+
+
 		<div class="control-group">
 			<label class="control-label">省：</label>
 			<div class="controls">
@@ -103,9 +90,9 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">市：</label>
+			<label class="control-label">医院：</label>
 			<div class="controls">
-				<form:input path="cityCode" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+				<form:input path="hospitalName" htmlEscape="false" maxlength="100" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -117,7 +104,11 @@
 		<div class="control-group">
 			<label class="control-label">患者性别：</label>
 			<div class="controls">
-				<form:input path="patientSex" htmlEscape="false" maxlength="1" class="input-xlarge "/>
+				<form:select path="patientSex" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+
 			</div>
 		</div>
 		<div class="control-group">
@@ -129,7 +120,10 @@
 		<div class="control-group">
 			<label class="control-label">手术类别：</label>
 			<div class="controls">
-				<form:input path="surgeryId" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+				<form:select path="surgeryId" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${surgeryIds}" itemLabel="paramName" itemValue="id" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
@@ -138,17 +132,18 @@
 				<form:input path="userName" htmlEscape="false" maxlength="100" class="input-xlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">报台人：</label>
-			<div class="controls">
-				<sys:treeselect id="userId" name="userId" value="${reportStandbook.userId}" labelName="" labelValue="${reportStandbook.}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
-			</div>
-		</div>
+
+		<form:hidden path="type"/>
 		<div class="control-group">
 			<label class="control-label">报台类型：</label>
 			<div class="controls">
-				<form:input path="type" htmlEscape="false" maxlength="1" class="input-xlarge "/>
+				<c:if test="${reportStandbook.type=='1' }">
+					直属/子公司人员报台
+				</c:if>
+				<c:if test="${reportStandbook.type=='2' }">
+					经销商报台
+				</c:if>
+
 			</div>
 		</div>
 		<div class="control-group">
@@ -173,9 +168,15 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">报台人类型：</label>
+			<div class="controls">
+				<form:input path="user.baseReportName" htmlEscape="false" maxlength="100" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">报台人单位：</label>
 			<div class="controls">
-				<form:input path="dealerName" htmlEscape="false" maxlength="100" class="input-xlarge "/>
+				<form:input path="user.dealerName" htmlEscape="false" maxlength="100" class="input-xlarge "/>
 			</div>
 		</div>
 			<div class="control-group">
@@ -185,32 +186,29 @@
 						<thead>
 							<tr>
 								<th class="hide"></th>
+								<th>评分名称</th>
 								<th>评分</th>
-								<th>评分id</th>
 								<shiro:hasPermission name="akec:reportStandbook:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
 							</tr>
 						</thead>
 						<tbody id="reportStandbookGradeDetailList">
 						</tbody>
-						<shiro:hasPermission name="akec:reportStandbook:edit"><tfoot>
-							<tr><td colspan="4"><a href="javascript:" onclick="addRow('#reportStandbookGradeDetailList', reportStandbookGradeDetailRowIdx, reportStandbookGradeDetailTpl);reportStandbookGradeDetailRowIdx = reportStandbookGradeDetailRowIdx + 1;" class="btn">新增</a></td></tr>
-						</tfoot></shiro:hasPermission>
+
 					</table>
 					<script type="text/template" id="reportStandbookGradeDetailTpl">//<!--
 						<tr id="reportStandbookGradeDetailList{{idx}}">
 							<td class="hide">
 								<input id="reportStandbookGradeDetailList{{idx}}_id" name="reportStandbookGradeDetailList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
 								<input id="reportStandbookGradeDetailList{{idx}}_delFlag" name="reportStandbookGradeDetailList[{{idx}}].delFlag" type="hidden" value="0"/>
+								<input id="reportStandbookGradeDetailList{{idx}}_gradeId" name="reportStandbookGradeDetailList[{{idx}}].gradeId" type="hidden" value="{{row.gradeId}}"/>
 							</td>
 							<td>
-								<input id="reportStandbookGradeDetailList{{idx}}_grade" name="reportStandbookGradeDetailList[{{idx}}].grade" type="text" value="{{row.grade}}" class="input-small "/>
-							</td>
+								{{row.gradeName}}	</td>
 							<td>
-								<input id="reportStandbookGradeDetailList{{idx}}_gradeId" name="reportStandbookGradeDetailList[{{idx}}].gradeId" type="text" value="{{row.gradeId}}" maxlength="32" class="input-small "/>
+								{{row.grade}}
 							</td>
-							<shiro:hasPermission name="akec:reportStandbook:edit"><td class="text-center" width="10">
-								{{#delBtn}}<span class="close" onclick="delRow(this, '#reportStandbookGradeDetailList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
-							</td></shiro:hasPermission>
+
+
 						</tr>//-->
 					</script>
 					<script type="text/javascript">
@@ -238,9 +236,7 @@
 						</thead>
 						<tbody id="reportStandbookImageDetailList">
 						</tbody>
-						<shiro:hasPermission name="akec:reportStandbook:edit"><tfoot>
-							<tr><td colspan="3"><a href="javascript:" onclick="addRow('#reportStandbookImageDetailList', reportStandbookImageDetailRowIdx, reportStandbookImageDetailTpl);reportStandbookImageDetailRowIdx = reportStandbookImageDetailRowIdx + 1;" class="btn">新增</a></td></tr>
-						</tfoot></shiro:hasPermission>
+
 					</table>
 					<script type="text/template" id="reportStandbookImageDetailTpl">//<!--
 						<tr id="reportStandbookImageDetailList{{idx}}">
@@ -250,11 +246,9 @@
 							</td>
 							<td>
 								<input id="reportStandbookImageDetailList{{idx}}_reportImgUrl" name="reportStandbookImageDetailList[{{idx}}].reportImgUrl" type="hidden" value="{{row.reportImgUrl}}" maxlength="100"/>
-								<sys:ckfinder input="reportStandbookImageDetailList{{idx}}_reportImgUrl" type="files" uploadPath="/akec/reportStandbook" selectMultiple="true"/>
+								<sys:ckfinder input="reportStandbookImageDetailList{{idx}}_reportImgUrl" type="files" uploadPath="/akec/reportStandbook"  readonly="true"/>
 							</td>
-							<shiro:hasPermission name="akec:reportStandbook:edit"><td class="text-center" width="10">
-								{{#delBtn}}<span class="close" onclick="delRow(this, '#reportStandbookImageDetailList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
-							</td></shiro:hasPermission>
+
 						</tr>//-->
 					</script>
 					<script type="text/javascript">
@@ -276,23 +270,44 @@
 						<thead>
 							<tr>
 								<th class="hide"></th>
-								<th>产品ID</th>
-								<th>产品个体码</th>
-								<th>是否返利</th>
-								<th>备注</th>
-								<th>是否记台</th>
-								<th>是否校验个体码</th>
-								<th>条形码</th>
-								<th>生产日期</th>
-								<th>失效日期</th>
-								<shiro:hasPermission name="akec:reportStandbook:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
+
+								<th>
+									产品编码
+								</th>
+								<th>
+									个体码
+								</th>
+								<th>
+									条形码
+								</th>
+								<th>
+									产品名称
+								</th>
+								<th>
+									配送经销商名称
+								</th>
+								<th>
+									是否记台
+								</th>
+								<th>
+									是否校验个体码
+								</th>
+								<th>
+									是否返利
+								</th>
+
+								<th>
+									生产日期
+								</th>
+								<th>
+									失效日期
+								</td>
+
 							</tr>
 						</thead>
 						<tbody id="reportStandbookProductDetailList">
 						</tbody>
-						<shiro:hasPermission name="akec:reportStandbook:edit"><tfoot>
-							<tr><td colspan="11"><a href="javascript:" onclick="addRow('#reportStandbookProductDetailList', reportStandbookProductDetailRowIdx, reportStandbookProductDetailTpl);reportStandbookProductDetailRowIdx = reportStandbookProductDetailRowIdx + 1;" class="btn">新增</a></td></tr>
-						</tfoot></shiro:hasPermission>
+
 					</table>
 					<script type="text/template" id="reportStandbookProductDetailTpl">//<!--
 						<tr id="reportStandbookProductDetailList{{idx}}">
@@ -301,50 +316,50 @@
 								<input id="reportStandbookProductDetailList{{idx}}_delFlag" name="reportStandbookProductDetailList[{{idx}}].delFlag" type="hidden" value="0"/>
 							</td>
 							<td>
-								<input id="reportStandbookProductDetailList{{idx}}_productId" name="reportStandbookProductDetailList[{{idx}}].productId" type="text" value="{{row.productId}}" maxlength="32" class="input-small "/>
-							</td>
+								{{row.product.code}}	</td>
 							<td>
-								<input id="reportStandbookProductDetailList{{idx}}_individualcode" name="reportStandbookProductDetailList[{{idx}}].individualcode" type="text" value="{{row.individualcode}}" maxlength="100" class="input-small "/>
-							</td>
-							<td>
-								<select id="reportStandbookProductDetailList{{idx}}_integral" name="reportStandbookProductDetailList[{{idx}}].integral" data-value="{{row.integral}}" class="input-small ">
+								{{row.individualcode}}
+							 </td>
+							 <td>
+									{{row.product.barCode}}
+								</td>
+								<td>
+									{{row.product.materialDesc}}
+								</td>
+								<td>
+									{{row.sellproduct.dealerName}}
+								</td>
+								<td>
+								<select  disabled data-value="{{row.isRecordUnit}}" class="input-small ">
 									<option value=""></option>
 									<c:forEach items="${fns:getDictList('yes_no')}" var="dict">
 										<option value="${dict.value}">${dict.label}</option>
 									</c:forEach>
 								</select>
-							</td>
-							<td>
-								<input id="reportStandbookProductDetailList{{idx}}_note" name="reportStandbookProductDetailList[{{idx}}].note" type="text" value="{{row.note}}" maxlength="255" class="input-small "/>
-							</td>
-							<td>
-								<select id="reportStandbookProductDetailList{{idx}}_isRecordUnit" name="reportStandbookProductDetailList[{{idx}}].isRecordUnit" data-value="{{row.isRecordUnit}}" class="input-small ">
+
+								</td>
+								<td>
+								<select  disabled data-value="{{row.isVerifyIndividualcode}}" class="input-small ">
 									<option value=""></option>
 									<c:forEach items="${fns:getDictList('yes_no')}" var="dict">
 										<option value="${dict.value}">${dict.label}</option>
 									</c:forEach>
 								</select>
-							</td>
-							<td>
-								<select id="reportStandbookProductDetailList{{idx}}_isVerifyIndividualcode" name="reportStandbookProductDetailList[{{idx}}].isVerifyIndividualcode" data-value="{{row.isVerifyIndividualcode}}" class="input-small ">
-									<option value=""></option>
-									<c:forEach items="${fns:getDictList('yes_no')}" var="dict">
-										<option value="${dict.value}">${dict.label}</option>
-									</c:forEach>
-								</select>
-							</td>
-							<td>
-								<input id="reportStandbookProductDetailList{{idx}}_scanCode" name="reportStandbookProductDetailList[{{idx}}].scanCode" type="text" value="{{row.scanCode}}" maxlength="100" class="input-small "/>
-							</td>
-							<td>
-								<input id="reportStandbookProductDetailList{{idx}}_produceDate" name="reportStandbookProductDetailList[{{idx}}].produceDate" type="text" value="{{row.produceDate}}" maxlength="6" class="input-small "/>
-							</td>
-							<td>
-								<input id="reportStandbookProductDetailList{{idx}}_outdate" name="reportStandbookProductDetailList[{{idx}}].outdate" type="text" value="{{row.outdate}}" maxlength="6" class="input-small "/>
-							</td>
-							<shiro:hasPermission name="akec:reportStandbook:edit"><td class="text-center" width="10">
-								{{#delBtn}}<span class="close" onclick="delRow(this, '#reportStandbookProductDetailList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
-							</td></shiro:hasPermission>
+
+								</td>
+								<td>
+								{{row.integral}}
+
+								</td>
+								<td>
+									{{row.produceDate }}
+								</td>
+								<td>
+									{{row.outdate }}
+								</td>
+
+
+
 						</tr>//-->
 					</script>
 					<script type="text/javascript">

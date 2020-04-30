@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.HospitalCountDetailDao">
+    
+	<sql id="hospitalCountDetailColumns">
+		a.id AS "id",
+		a.h_id AS "h.id",
+		a.year AS "year",
+		a.ak_count AS "akCount",
+		a.unit_count AS "unitCount",
+		a.type AS "type",
+		a.typename AS "typename",
+		a.remarks AS "remarks",
+		b.hospital_name AS "h.hospitalName"
+	</sql>
+	
+	<sql id="hospitalCountDetailJoins">
+		LEFT JOIN t_hospital b ON b.id = a.h_id
+	</sql>
+    
+	<select id="get" resultType="HospitalCountDetail">
+		SELECT 
+			<include refid="hospitalCountDetailColumns"/>
+		FROM t_hospital_count_detail a
+		<include refid="hospitalCountDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="HospitalCountDetail">
+		SELECT 
+			<include refid="hospitalCountDetailColumns"/>
+		FROM t_hospital_count_detail a
+		<include refid="hospitalCountDetailJoins"/>
+		<where>
+			
+			<if test="h != null and h.id != null and h.id != ''">
+				AND a.h_id = #{h.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="HospitalCountDetail">
+		SELECT 
+			<include refid="hospitalCountDetailColumns"/>
+		FROM t_hospital_count_detail a
+		<include refid="hospitalCountDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_hospital_count_detail(
+			id,
+			h_id,
+			year,
+			ak_count,
+			type,
+			unit_count,
+			typename,
+			remarks
+		) VALUES (
+			#{id},
+			#{h.id},
+			#{year},
+			#{akCount},
+			#{type},
+			#{unitCount},
+			#{typename},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_hospital_count_detail SET 	
+			h_id = #{h.id},
+			year = #{year},
+			ak_count = #{akCount},
+			type = #{type},
+			typename = #{typename},
+			unit_count=#{unitCount},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_hospital_count_detail
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE h_id = #{h.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

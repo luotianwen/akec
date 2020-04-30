@@ -22,6 +22,8 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.akec.entity.Region;
 import com.thinkgem.jeesite.modules.akec.service.RegionService;
 
+import java.util.List;
+
 /**
  * 医院信息Controller
  * @author 医院信息
@@ -49,7 +51,14 @@ public class RegionController extends BaseController {
 	@RequiresPermissions("akec:region:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Region region, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<Region> page = regionService.findPage(new Page<Region>(request, response), region); 
+		Page<Region> page = regionService.findPage(new Page<Region>(request, response), region);
+		List<Region> rs=page.getList();
+		/*for (Region r:rs
+			 ) {
+			Region c=regionService.get(r.getParentCode());
+			r.setCityName(c.getName());
+			r.setProvinceName(regionService.get(c.getParentCode()).getName());
+		}*/
 		model.addAttribute("page", page);
 		return "modules/akec/regionList";
 	}

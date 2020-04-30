@@ -3,6 +3,19 @@
  */
 package com.thinkgem.jeesite.common.utils.excel;
 
+import com.google.common.collect.Lists;
+import com.thinkgem.jeesite.common.utils.Reflections;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
+import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,24 +26,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.google.common.collect.Lists;
-import com.thinkgem.jeesite.common.utils.Reflections;
-import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
-import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 
 /**
  * 导入Excel文件（支持“XLS”和“XLSX”格式）
@@ -60,7 +55,7 @@ public class ImportExcel {
 	 * 构造函数
 	 * @param path 导入文件，读取第一个工作表
 	 * @param headerNum 标题行号，数据行号=标题行号+1
-	 * @throws InvalidFormatException 
+	 * @throws InvalidFormatException
 	 * @throws IOException 
 	 */
 	public ImportExcel(String fileName, int headerNum) 
@@ -72,7 +67,7 @@ public class ImportExcel {
 	 * 构造函数
 	 * @param path 导入文件对象，读取第一个工作表
 	 * @param headerNum 标题行号，数据行号=标题行号+1
-	 * @throws InvalidFormatException 
+	 * @throws InvalidFormatException
 	 * @throws IOException 
 	 */
 	public ImportExcel(File file, int headerNum) 
@@ -85,7 +80,7 @@ public class ImportExcel {
 	 * @param path 导入文件
 	 * @param headerNum 标题行号，数据行号=标题行号+1
 	 * @param sheetIndex 工作表编号
-	 * @throws InvalidFormatException 
+	 * @throws InvalidFormatException
 	 * @throws IOException 
 	 */
 	public ImportExcel(String fileName, int headerNum, int sheetIndex) 
@@ -98,7 +93,7 @@ public class ImportExcel {
 	 * @param path 导入文件对象
 	 * @param headerNum 标题行号，数据行号=标题行号+1
 	 * @param sheetIndex 工作表编号
-	 * @throws InvalidFormatException 
+	 * @throws InvalidFormatException
 	 * @throws IOException 
 	 */
 	public ImportExcel(File file, int headerNum, int sheetIndex) 
@@ -111,10 +106,10 @@ public class ImportExcel {
 	 * @param file 导入文件对象
 	 * @param headerNum 标题行号，数据行号=标题行号+1
 	 * @param sheetIndex 工作表编号
-	 * @throws InvalidFormatException 
+	 * @throws InvalidFormatException
 	 * @throws IOException 
 	 */
-	public ImportExcel(MultipartFile multipartFile, int headerNum, int sheetIndex) 
+	public ImportExcel(MultipartFile multipartFile, int headerNum, int sheetIndex)
 			throws InvalidFormatException, IOException {
 		this(multipartFile.getOriginalFilename(), multipartFile.getInputStream(), headerNum, sheetIndex);
 	}
@@ -124,7 +119,7 @@ public class ImportExcel {
 	 * @param path 导入文件对象
 	 * @param headerNum 标题行号，数据行号=标题行号+1
 	 * @param sheetIndex 工作表编号
-	 * @throws InvalidFormatException 
+	 * @throws InvalidFormatException
 	 * @throws IOException 
 	 */
 	public ImportExcel(String fileName, InputStream is, int headerNum, int sheetIndex) 
@@ -132,7 +127,7 @@ public class ImportExcel {
 		if (StringUtils.isBlank(fileName)){
 			throw new RuntimeException("导入文档为空!");
 		}else if(fileName.toLowerCase().endsWith("xls")){    
-			this.wb = new HSSFWorkbook(is);    
+			this.wb = new HSSFWorkbook(is);
         }else if(fileName.toLowerCase().endsWith("xlsx")){  
         	this.wb = new XSSFWorkbook(is);
         }else{  
@@ -190,7 +185,7 @@ public class ImportExcel {
 		try{
 			Cell cell = row.getCell(column);
 			if (cell != null){
-				if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+				/*if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
 					val = cell.getNumericCellValue();
 				}else if (cell.getCellType() == Cell.CELL_TYPE_STRING){
 					val = cell.getStringCellValue();
@@ -200,7 +195,7 @@ public class ImportExcel {
 					val = cell.getBooleanCellValue();
 				}else if (cell.getCellType() == Cell.CELL_TYPE_ERROR){
 					val = cell.getErrorCellValue();
-				}
+				}*/
 			}
 		}catch (Exception e) {
 			return val;
@@ -336,7 +331,7 @@ public class ImportExcel {
 					}else if (os[1] instanceof Method){
 						String mthodName = ((Method)os[1]).getName();
 						if ("get".equals(mthodName.substring(0, 3))){
-							mthodName = "set"+StringUtils.substringAfter(mthodName, "get");
+							mthodName = "set"+ StringUtils.substringAfter(mthodName, "get");
 						}
 						Reflections.invokeMethod(e, mthodName, new Class[] {valType}, new Object[] {val});
 					}

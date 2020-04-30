@@ -22,7 +22,17 @@
 	
 	<sql id="sellproductJoins">
 	</sql>
-    
+	<select id="getByIndividualcode" resultType="Sellproduct">
+		SELECT
+		<include refid="sellproductColumns"/>
+		FROM t_sellproduct a
+		<include refid="sellproductJoins"/>
+		WHERE
+		     a.individualcode = #{individualcode}
+			AND a.proudct_code = #{proudctCode}
+
+	</select>
+
 	<select id="get" resultType="Sellproduct">
 		SELECT 
 			<include refid="sellproductColumns"/>

@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.akec.entity.Sellproduct;
 
+import java.util.List;
+
 /**
  * 已售产品信息DAO接口
  * @author 已售产品信息
@@ -14,5 +16,6 @@ import com.thinkgem.jeesite.modules.akec.entity.Sellproduct;
  */
 @MyBatisDao
 public interface SellproductDao extends CrudDao<Sellproduct> {
-	
+
+    List<Sellproduct> getByIndividualcode(Sellproduct sellproduct);
 }

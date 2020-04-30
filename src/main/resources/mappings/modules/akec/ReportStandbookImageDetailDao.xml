@@ -5,7 +5,7 @@
 	<sql id="reportStandbookImageDetailColumns">
 		a.id AS "id",
 		a.report_img_url AS "reportImgUrl",
-		a.report_id AS "report.Id",
+		a.report_id AS "report.id",
 		a.add_date AS "addDate",
 		b.type AS "report.type"
 	</sql>
@@ -29,8 +29,8 @@
 		<include refid="reportStandbookImageDetailJoins"/>
 		<where>
 			
-			<if test="report != null and report.Id != null and report.Id != ''">
-				AND a.report_id = #{report.Id}
+			<if test="report != null and report.id != null and report.id != ''">
+				AND a.report_id = #{report.id}
 			</if>
 		</where>
 		<choose>
@@ -68,7 +68,7 @@
 		) VALUES (
 			#{id},
 			#{reportImgUrl},
-			#{report.Id},
+			#{report.id},
 			#{addDate}
 		)
 	</insert>
@@ -86,7 +86,7 @@
 				WHERE id = #{id}
 			</when>
 			<otherwise>
-				WHERE report_id = #{report.Id}
+				WHERE report_id = #{report.id}
 			</otherwise>
 		</choose>
 	</update>

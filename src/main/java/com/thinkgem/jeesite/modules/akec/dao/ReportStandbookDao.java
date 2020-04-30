@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.akec.entity.ReportStandbook;
 
+import java.util.List;
+
 /**
  * 报台信息DAO接口
  * @author 报台信息
@@ -14,5 +16,6 @@ import com.thinkgem.jeesite.modules.akec.entity.ReportStandbook;
  */
 @MyBatisDao
 public interface ReportStandbookDao extends CrudDao<ReportStandbook> {
-	
+
+    List<ReportStandbook> queryListReportStandbook(ReportStandbook reportStandbook);
 }

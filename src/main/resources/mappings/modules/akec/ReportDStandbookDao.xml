@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.ReportDStandbookDao">
+    
+	<sql id="reportDStandbookColumns">
+		a.id AS "id",
+		a.operate_date AS "operateDate",
+		a.hospital_name AS "hospitalName",
+		a.hospital_id AS "hospitalId",
+		a.province_code AS "provinceCode",
+		a.province_name AS "provinceName",
+		a.city_name AS "cityName",
+		a.city_code AS "cityCode",
+		a.doctor_name AS "doctorName",
+		a.patient_sex AS "patientSex",
+		a.patient_age AS "patientAge",
+		a.surgery_id AS "surgeryId",
+		a.surgery_grade AS "surgeryGrade",
+		a.user_name AS "userName",
+		a.user_id AS "user.id",
+		a.type AS "type",
+		a.unit_count AS "unitCount",
+		a.create_date AS "createDate",
+		a.status AS "status",
+		a.suggest AS "suggest",
+		a.update_date AS "updateDate",
+		a.update_admin_name AS "updateAdminName",
+		a.dealer_name AS "dealerName",
+		a.patient_name AS "patientName",
+		u15.name AS "user.name"
+	</sql>
+	
+	<sql id="reportDStandbookJoins">
+		LEFT JOIN sys_user u15 ON u15.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="ReportDStandbook">
+		SELECT 
+			<include refid="reportDStandbookColumns"/>
+		FROM t_report_d_standbook a
+		<include refid="reportDStandbookJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ReportDStandbook">
+		SELECT 
+			<include refid="reportDStandbookColumns"/>
+		FROM t_report_d_standbook a
+		<include refid="reportDStandbookJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReportDStandbook">
+		SELECT 
+			<include refid="reportDStandbookColumns"/>
+		FROM t_report_d_standbook a
+		<include refid="reportDStandbookJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_report_d_standbook(
+			id,
+			operate_date,
+			hospital_name,
+			hospital_id,
+			province_code,
+			province_name,
+			city_name,
+			city_code,
+			doctor_name,
+			patient_sex,
+			patient_age,
+			surgery_id,
+			surgery_grade,
+			user_name,
+			user_id,
+			type,
+			unit_count,
+			create_date,
+			status,
+			suggest,
+			update_date,
+			update_admin_name,
+			dealer_name,
+			patient_name
+		) VALUES (
+			#{id},
+			#{operateDate},
+			#{hospitalName},
+			#{hospitalId},
+			#{provinceCode},
+			#{provinceName},
+			#{cityName},
+			#{cityCode},
+			#{doctorName},
+			#{patientSex},
+			#{patientAge},
+			#{surgeryId},
+			#{surgeryGrade},
+			#{userName},
+			#{user.id},
+			#{type},
+			#{unitCount},
+			#{createDate},
+			#{status},
+			#{suggest},
+			#{updateDate},
+			#{updateAdminName},
+			#{dealerName},
+			#{patientName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_report_d_standbook SET 	
+			operate_date = #{operateDate},
+			hospital_name = #{hospitalName},
+			hospital_id = #{hospitalId},
+			province_code = #{provinceCode},
+			province_name = #{provinceName},
+			city_name = #{cityName},
+			city_code = #{cityCode},
+			doctor_name = #{doctorName},
+			patient_sex = #{patientSex},
+			patient_age = #{patientAge},
+			surgery_id = #{surgeryId},
+			surgery_grade = #{surgeryGrade},
+			user_name = #{userName},
+			user_id = #{user.id},
+			type = #{type},
+			unit_count = #{unitCount},
+			status = #{status},
+			suggest = #{suggest},
+			update_date = #{updateDate},
+			update_admin_name = #{updateAdminName},
+			dealer_name = #{dealerName},
+			patient_name = #{patientName}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_report_d_standbook
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

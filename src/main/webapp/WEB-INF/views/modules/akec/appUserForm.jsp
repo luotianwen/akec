@@ -32,11 +32,16 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="appUser" action="${ctx}/akec/appUser/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
+		<form:hidden path="createType"/>
+		<form:hidden path="pass"/>
+		<form:hidden path="adminName"/>
+		<form:hidden path="dealerName"/>
+
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">账号名：</label>
 			<div class="controls">
-				<form:input path="account" htmlEscape="false" maxlength="20" class="input-xlarge "/>
+				<form:input path="account" htmlEscape="false" maxlength="20" class="input-xlarge  required"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -45,16 +50,14 @@
 				<form:input path="name" htmlEscape="false" maxlength="20" class="input-xlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">密码：</label>
-			<div class="controls">
-				<form:input path="pass" htmlEscape="false" maxlength="40" class="input-xlarge "/>
-			</div>
-		</div>
+
 		<div class="control-group">
 			<label class="control-label">经销商：</label>
 			<div class="controls">
-				<form:input path="dealerId" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+				<form:select path="dealerId" class="input-xlarge required">
+					<form:option value="" label=""/>
+					<form:options items="${dealers}" itemLabel="name" itemValue="id" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
@@ -63,28 +66,30 @@
 				<form:input path="registerDealerName" htmlEscape="false" maxlength="80" class="input-xlarge "/>
 			</div>
 		</div>
+
 		<div class="control-group">
-			<label class="control-label">经销商名字：</label>
+			<label class="control-label">报台人类型：</label>
 			<div class="controls">
-				<form:input path="dealerName" htmlEscape="false" maxlength="40" class="input-xlarge "/>
+				<form:select path="baseReportId" class="input-xlarge required">
+					<form:option value="" label=""/>
+					<form:options items="${basedataList}" itemLabel="paramName" itemValue="id" htmlEscape="false"/>
+				</form:select>
+
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">系统参数表：</label>
+			<label class="control-label">启用状态：</label>
 			<div class="controls">
-				<form:input path="baseReportId" htmlEscape="false" maxlength="32" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">状态：</label>
-			<div class="controls">
-				<form:input path="auditStatus" htmlEscape="false" maxlength="1" class="input-xlarge "/>
+				<form:radiobuttons path="auditStatus" cssClass="required" items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+
+
+
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">备注：</label>
 			<div class="controls">
-				<form:input path="note" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:textarea path="note" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -95,28 +100,13 @@
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">审核人：</label>
-			<div class="controls">
-				<form:input path="adminName" htmlEscape="false" maxlength="20" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">创建类型：</label>
-			<div class="controls">
-				<form:select path="createType" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('create_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
+
+
 		<div class="control-group">
 			<label class="control-label">允许输入：</label>
 			<div class="controls">
-				<form:select path="inputFlag" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+				<form:radiobuttons path="inputFlag" cssClass="required"  items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+
 			</div>
 		</div>
 		<div class="form-actions">

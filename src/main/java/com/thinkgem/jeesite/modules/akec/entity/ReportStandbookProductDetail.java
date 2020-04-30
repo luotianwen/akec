@@ -16,16 +16,56 @@ public class ReportStandbookProductDetail extends DataEntity<ReportStandbookProd
 	
 	private static final long serialVersionUID = 1L;
 	private ReportStandbook report;		// 外键参照报台主表 父类
+    private Product product;
 	private String productId;		// 产品ID
 	private String individualcode;		// 产品个体码
-	private String integral;		// 是否返利
-	private String note;		// 备注
+	private String integral;		// 是否返利 1
+	private String note;		// 备注2
 	private String isRecordUnit;		// 是否记台
 	private String isVerifyIndividualcode;		// 是否校验个体码
 	private String scanCode;		// 条形码
 	private String produceDate;		// 生产日期
 	private String outdate;		// 失效日期
-	
+	private Sellproduct  sellproduct;
+
+	public Sellproduct getSellproduct() {
+		return sellproduct;
+	}
+
+	public void setSellproduct(Sellproduct sellproduct) {
+		this.sellproduct = sellproduct;
+	}
+
+	public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    private String type;
+
+	private String indivualcode;
+
+	public String getIndivualcode() {
+		return indivualcode;
+	}
+
+	public void setIndivualcode(String indivualcode) {
+		this.indivualcode = indivualcode;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+
 	public ReportStandbookProductDetail() {
 		super();
 	}

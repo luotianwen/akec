@@ -43,5 +43,8 @@ public class SellproductService extends CrudService<SellproductDao, Sellproduct>
 	public void delete(Sellproduct sellproduct) {
 		super.delete(sellproduct);
 	}
-	
+
+	public List<Sellproduct> getByIndividualcode(Sellproduct sellproduct) {
+		return dao.getByIndividualcode(sellproduct);
+	}
 }

@@ -14,5 +14,8 @@ import com.thinkgem.jeesite.modules.akec.entity.ReportStandbookProductDetail;
  */
 @MyBatisDao
 public interface ReportStandbookProductDetailDao extends CrudDao<ReportStandbookProductDetail> {
-	
+
+    int countReprotProduct(ReportStandbookProductDetail rd);
+
+    int countHistoryReprotProduct(ReportStandbookProductDetail rd);
 }

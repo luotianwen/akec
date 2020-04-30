@@ -30,7 +30,16 @@ public class AppUser extends DataEntity<AppUser> {
 	private String adminName;		// 审核人
 	private String createType;		// 创建类型
 	private String inputFlag;		// 允许输入
-	
+	private String  baseReportName;
+
+	public String getBaseReportName() {
+		return baseReportName;
+	}
+
+	public void setBaseReportName(String baseReportName) {
+		this.baseReportName = baseReportName;
+	}
+
 	public AppUser() {
 		super();
 	}

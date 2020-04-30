@@ -22,7 +22,43 @@ public class Region extends DataEntity<Region> {
 	private String status;		// 状态
 	private String level;		// 级次
 	private String degree;		// 医院等级
-	
+	private String provinceId;				//省ID
+	private String provinceName;			//省名称
+	private String cityId;					//城市ID
+	private String cityName;				//城市名称
+
+	public String getProvinceId() {
+		return provinceId;
+	}
+
+	public void setProvinceId(String provinceId) {
+		this.provinceId = provinceId;
+	}
+
+	public String getProvinceName() {
+		return provinceName;
+	}
+
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName;
+	}
+
+	public String getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
 	public Region() {
 		super();
 	}

@@ -10,7 +10,7 @@ import com.thinkgem.jeesite.modules.akec.entity.BasedataType;
 /**
  * 常用参数DAO接口
  * @author 常用参数
- * @version 2020-02-27
+ * @version 2020-03-10
  */
 @MyBatisDao
 public interface BasedataTypeDao extends CrudDao<BasedataType> {

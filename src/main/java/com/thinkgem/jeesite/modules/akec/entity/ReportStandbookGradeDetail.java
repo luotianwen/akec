@@ -18,7 +18,16 @@ public class ReportStandbookGradeDetail extends DataEntity<ReportStandbookGradeD
 	private String grade;		// 评分
 	private ReportStandbook report;		// report_id 父类
 	private String gradeId;		// 评分id
-	
+	private String gradeName;		// 评分id
+
+	public String getGradeName() {
+		return gradeName;
+	}
+
+	public void setGradeName(String gradeName) {
+		this.gradeName = gradeName;
+	}
+
 	public ReportStandbookGradeDetail() {
 		super();
 	}

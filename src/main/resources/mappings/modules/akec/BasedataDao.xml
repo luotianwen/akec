@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.BasedataDao">
+    
+	<sql id="basedataColumns">
+		a.id AS "id",
+		a.base_id AS "base.id",
+		a.param_code AS "paramCode",
+		a.param_name AS "paramName",
+		a.status AS "status",
+		a.seqno AS "seqno",
+		b.base_type_name AS "base.baseTypeName"
+	</sql>
+	
+	<sql id="basedataJoins">
+		LEFT JOIN t_basedata_type b ON b.id = a.base_id
+	</sql>
+    
+	<select id="get" resultType="Basedata">
+		SELECT 
+			<include refid="basedataColumns"/>
+		FROM t_basedata a
+		<include refid="basedataJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Basedata">
+		SELECT 
+			<include refid="basedataColumns"/>
+		FROM t_basedata a
+		<include refid="basedataJoins"/>
+		<where>
+			
+			<if test="base != null and base.id != null and base.id != ''">
+				AND a.base_id = #{base.id}
+			</if>
+			<if test="paramCode != null and paramCode != ''">
+				AND a.param_code = #{paramCode}
+			</if>
+			<if test="paramName != null and paramName != ''">
+				AND a.param_name = #{paramName}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Basedata">
+		SELECT 
+			<include refid="basedataColumns"/>
+		FROM t_basedata a
+		<include refid="basedataJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_basedata(
+			id,
+			base_id,
+			param_code,
+			param_name,
+			status,
+			seqno
+		) VALUES (
+			#{id},
+			#{base.id},
+			#{paramCode},
+			#{paramName},
+			#{status},
+			#{seqno}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_basedata SET 	
+			base_id = #{base.id},
+			param_code = #{paramCode},
+			param_name = #{paramName},
+			status = #{status},
+			seqno = #{seqno}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_basedata
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE base_id = #{base.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

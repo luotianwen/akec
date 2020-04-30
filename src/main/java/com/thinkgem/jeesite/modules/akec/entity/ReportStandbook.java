@@ -33,6 +33,16 @@ public class ReportStandbook extends DataEntity<ReportStandbook> {
 	private String surgeryGrade;		// surgery_grade
 	private String userName;		// 报台人
 	private String userId;		// 报台人
+	private AppUser user;		// 报台人
+
+	public AppUser getUser() {
+		return user;
+	}
+
+	public void setUser(AppUser user) {
+		this.user = user;
+	}
+
 	private String type;		// 报台类型
 	private String unitCount;		// 台数
 	private String status;		// 状态
@@ -45,7 +55,44 @@ public class ReportStandbook extends DataEntity<ReportStandbook> {
 	private List<ReportStandbookGradeDetail> reportStandbookGradeDetailList = Lists.newArrayList();		// 子表列表
 	private List<ReportStandbookImageDetail> reportStandbookImageDetailList = Lists.newArrayList();		// 子表列表
 	private List<ReportStandbookProductDetail> reportStandbookProductDetailList = Lists.newArrayList();		// 子表列表
-	
+
+	private Date beginCreateDate;		// 开始 时间
+	private Date endCreateDate;		// 结束 时间
+	private boolean show;
+
+	public Date getBeginCreateDate() {
+		return beginCreateDate;
+	}
+
+	public void setBeginCreateDate(Date beginCreateDate) {
+		this.beginCreateDate = beginCreateDate;
+	}
+
+	public Date getEndCreateDate() {
+		return endCreateDate;
+	}
+
+	public void setEndCreateDate(Date endCreateDate) {
+		this.endCreateDate = endCreateDate;
+	}
+
+	public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+
+    private String degree;		// 建议
+	public boolean isShow() {
+		return show;
+	}
+
+	public void setShow(boolean show) {
+		this.show = show;
+	}
+
 	public ReportStandbook() {
 		super();
 	}
@@ -54,7 +101,7 @@ public class ReportStandbook extends DataEntity<ReportStandbook> {
 		super(id);
 	}
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	public Date getOperateDate() {
 		return operateDate;
 	}

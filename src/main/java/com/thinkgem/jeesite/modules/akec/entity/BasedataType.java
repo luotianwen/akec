@@ -4,19 +4,22 @@
 package com.thinkgem.jeesite.modules.akec.entity;
 
 import org.hibernate.validator.constraints.Length;
+import java.util.List;
+import com.google.common.collect.Lists;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
  * 常用参数Entity
  * @author 常用参数
- * @version 2020-02-27
+ * @version 2020-03-10
  */
 public class BasedataType extends DataEntity<BasedataType> {
 	
 	private static final long serialVersionUID = 1L;
 	private String baseTypeCode;		// 编码
 	private String baseTypeName;		// 名称
+	private List<Basedata> basedataList = Lists.newArrayList();		// 子表列表
 	
 	public BasedataType() {
 		super();
@@ -44,4 +47,11 @@ public class BasedataType extends DataEntity<BasedataType> {
 		this.baseTypeName = baseTypeName;
 	}
 	
+	public List<Basedata> getBasedataList() {
+		return basedataList;
+	}
+
+	public void setBasedataList(List<Basedata> basedataList) {
+		this.basedataList = basedataList;
+	}
 }

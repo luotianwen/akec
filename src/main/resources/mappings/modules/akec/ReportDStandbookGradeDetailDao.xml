@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.ReportDStandbookGradeDetailDao">
+    
+	<sql id="reportDStandbookGradeDetailColumns">
+		a.id AS "id",
+		a.grade AS "grade",
+		a.report_id AS "reportId",
+		a.grade_id AS "gradeId",
+        g.name AS  gradeName
+	</sql>
+	
+	<sql id="reportDStandbookGradeDetailJoins">
+		LEFT JOIN t_report_d_standbook b ON b.id = a.report_id
+		LEFT JOIN t_grade g ON g.id = a.grade_id
+
+	</sql>
+    
+	<select id="get" resultType="ReportDStandbookGradeDetail">
+		SELECT 
+			<include refid="reportDStandbookGradeDetailColumns"/>
+		FROM t_report_d_standbook_grade_detail a
+		<include refid="reportDStandbookGradeDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ReportDStandbookGradeDetail">
+		SELECT 
+			<include refid="reportDStandbookGradeDetailColumns"/>
+		FROM t_report_d_standbook_grade_detail a
+		<include refid="reportDStandbookGradeDetailJoins"/>
+		<where>
+			
+			<if test="reportId != null and reportId != ''">
+				AND a.report_id = #{reportId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReportDStandbookGradeDetail">
+		SELECT 
+			<include refid="reportDStandbookGradeDetailColumns"/>
+		FROM t_report_d_standbook_grade_detail a
+		<include refid="reportDStandbookGradeDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_report_d_standbook_grade_detail(
+			id,
+			grade,
+			report_id,
+			grade_id
+		) VALUES (
+			#{id},
+			#{grade},
+			#{reportId},
+			#{gradeId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_report_d_standbook_grade_detail SET 	
+			grade = #{grade},
+			report_id = #{reportId},
+			grade_id = #{gradeId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_report_d_standbook_grade_detail
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE report_id = #{reportId}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

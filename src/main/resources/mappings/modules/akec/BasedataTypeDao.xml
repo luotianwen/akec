@@ -30,10 +30,7 @@
 				AND a.base_type_code = #{baseTypeCode}
 			</if>
 			<if test="baseTypeName != null and baseTypeName != ''">
-				AND a.base_type_name LIKE 
-					<if test="dbName == 'oracle'">'%'||#{baseTypeName}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{baseTypeName}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{baseTypeName},'%')</if>
+				AND a.base_type_name =#{baseTypeName}
 			</if>
 		</where>
 		<choose>

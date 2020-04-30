@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.ReportDStandbookImageDetailDao">
+    
+	<sql id="reportDStandbookImageDetailColumns">
+		a.id AS "id",
+		a.report_img_url AS "reportImgUrl",
+		a.report_id AS "reportId",
+		a.add_date AS "addDate"
+	</sql>
+	
+	<sql id="reportDStandbookImageDetailJoins">
+		LEFT JOIN t_report_d_standbook b ON b.id = a.report_id
+	</sql>
+    
+	<select id="get" resultType="ReportDStandbookImageDetail">
+		SELECT 
+			<include refid="reportDStandbookImageDetailColumns"/>
+		FROM t_report_d_standbook_image_detail a
+		<include refid="reportDStandbookImageDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ReportDStandbookImageDetail">
+		SELECT 
+			<include refid="reportDStandbookImageDetailColumns"/>
+		FROM t_report_d_standbook_image_detail a
+		<include refid="reportDStandbookImageDetailJoins"/>
+		<where>
+			
+			<if test="reportId != null and reportId != ''">
+				AND a.report_id = #{reportId}
+			</if>
+			<if test="addDate != null and addDate != ''">
+				AND a.add_date = #{addDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReportDStandbookImageDetail">
+		SELECT 
+			<include refid="reportDStandbookImageDetailColumns"/>
+		FROM t_report_d_standbook_image_detail a
+		<include refid="reportDStandbookImageDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_report_d_standbook_image_detail(
+			id,
+			report_img_url,
+			report_id,
+			add_date
+		) VALUES (
+			#{id},
+			#{reportImgUrl},
+			#{reportId},
+			#{addDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_report_d_standbook_image_detail SET 	
+			report_img_url = #{reportImgUrl},
+			report_id = #{reportId},
+			add_date = #{addDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_report_d_standbook_image_detail
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE report_id = #{reportId}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

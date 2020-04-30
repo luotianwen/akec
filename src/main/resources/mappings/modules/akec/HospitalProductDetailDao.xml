@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.HospitalProductDetailDao">
+    
+	<sql id="hospitalProductDetailColumns">
+		a.id AS "id",
+		a.status AS "status",
+		a.type AS "type",
+		a.typename AS "typename",
+		a.remarks AS "remarks",
+		a.h_id AS "h.id",
+		b.hospital_name AS "h.hospitalName"
+	</sql>
+	
+	<sql id="hospitalProductDetailJoins">
+		LEFT JOIN t_hospital b ON b.id = a.h_id
+	</sql>
+    
+	<select id="get" resultType="HospitalProductDetail">
+		SELECT 
+			<include refid="hospitalProductDetailColumns"/>
+		FROM t_hospital_product_detail a
+		<include refid="hospitalProductDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="HospitalProductDetail">
+		SELECT 
+			<include refid="hospitalProductDetailColumns"/>
+		FROM t_hospital_product_detail a
+		<include refid="hospitalProductDetailJoins"/>
+		<where>
+			
+			<if test="h != null and h.id != null and h.id != ''">
+				AND a.h_id = #{h.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="HospitalProductDetail">
+		SELECT 
+			<include refid="hospitalProductDetailColumns"/>
+		FROM t_hospital_product_detail a
+		<include refid="hospitalProductDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_hospital_product_detail(
+			id,
+			status,
+			type,
+			typename,
+			remarks,
+			h_id
+		) VALUES (
+			#{id},
+			#{status},
+			#{type},
+			#{typename},
+			#{remarks},
+			#{h.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_hospital_product_detail SET 	
+			status = #{status},
+			type = #{type},
+			typename = #{typename},
+			remarks = #{remarks},
+			h_id = #{h.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_hospital_product_detail
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE h_id = #{h.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

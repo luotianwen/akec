@@ -6,6 +6,10 @@ package com.thinkgem.jeesite.modules.akec.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.thinkgem.jeesite.modules.akec.dao.BasedataDao;
+import com.thinkgem.jeesite.modules.akec.entity.*;
+import com.thinkgem.jeesite.modules.akec.service.BasedataTypeService;
+import com.thinkgem.jeesite.modules.akec.service.DealerService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,8 +23,9 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.modules.akec.entity.AppUser;
 import com.thinkgem.jeesite.modules.akec.service.AppUserService;
+
+import java.util.List;
 
 /**
  * APP用户管理Controller
@@ -45,20 +50,51 @@ public class AppUserController extends BaseController {
 		}
 		return entity;
 	}
-	
+	@Autowired
+	private BasedataDao basedataDao;
 	@RequiresPermissions("akec:appUser:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(AppUser appUser, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<AppUser> page = appUserService.findPage(new Page<AppUser>(request, response), appUser); 
+		Page<AppUser> page = appUserService.findPage(new Page<AppUser>(request, response), appUser);
+		List<Basedata> basedataList =basedataTypeService.get("518370AD648C42B79759D2B6DB04DF6B").getBasedataList();
+		model.addAttribute("basedataList",basedataList);
 		model.addAttribute("page", page);
 		return "modules/akec/appUserList";
 	}
-
+	@Autowired
+	private BasedataTypeService basedataTypeService;
+	@Autowired
+	private DealerService dealerService;
 	@RequiresPermissions("akec:appUser:view")
 	@RequestMapping(value = "form")
 	public String form(AppUser appUser, Model model) {
+
+		List<Basedata> basedataList =basedataTypeService.get("518370AD648C42B79759D2B6DB04DF6B").getBasedataList();
+		model.addAttribute("basedataList",basedataList);
+		List<Dealer> dealers =dealerService.findList(new Dealer());
+		model.addAttribute("dealers",dealers);
+		if(StringUtils.isEmpty(appUser.getDealerId())){
+			for (Dealer d:dealers
+				 ) {
+				if(appUser.getDealerName().equals(d.getName())){
+					appUser.setDealerId(d.getId());
+					break;
+				}
+			}
+		}
 		model.addAttribute("appUser", appUser);
 		return "modules/akec/appUserForm";
+	}
+
+	@RequiresPermissions("akec:appUser:edit")
+	@RequestMapping(value = "pass")
+	public String pass(AppUser appUser, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, appUser)){
+			return form(appUser, model);
+		}
+		appUserService.pass(appUser);
+		addMessage(redirectAttributes, "重置密码成功");
+		return "redirect:"+Global.getAdminPath()+"/akec/appUser/?repage";
 	}
 
 	@RequiresPermissions("akec:appUser:edit")
@@ -67,6 +103,7 @@ public class AppUserController extends BaseController {
 		if (!beanValidator(model, appUser)){
 			return form(appUser, model);
 		}
+		appUser.setDealerName(dealerService.get(appUser.getDealerId()).getName());
 		appUserService.save(appUser);
 		addMessage(redirectAttributes, "保存APP用户管理成功");
 		return "redirect:"+Global.getAdminPath()+"/akec/appUser/?repage";

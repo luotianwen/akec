@@ -5,13 +5,15 @@
 	<sql id="reportStandbookGradeDetailColumns">
 		a.id AS "id",
 		a.grade AS "grade",
-		a.report_id AS "report.Id",
+		a.report_id AS "report.id",
 		a.grade_id AS "gradeId",
+		d.name AS "gradeName" ,
 		b.type AS "report.type"
 	</sql>
 	
 	<sql id="reportStandbookGradeDetailJoins">
 		LEFT JOIN t_report_standbook b ON b.id = a.report_id
+		LEFT JOIN t_grade d ON d.id = a.grade_id
 	</sql>
     
 	<select id="get" resultType="ReportStandbookGradeDetail">
@@ -29,8 +31,8 @@
 		<include refid="reportStandbookGradeDetailJoins"/>
 		<where>
 			
-			<if test="report != null and report.Id != null and report.Id != ''">
-				AND a.report_id = #{report.Id}
+			<if test="report != null and report.id != null and report.id != ''">
+				AND a.report_id = #{report.id}
 			</if>
 		</where>
 		<choose>
@@ -68,7 +70,7 @@
 		) VALUES (
 			#{id},
 			#{grade},
-			#{report.Id},
+			#{report.id},
 			#{gradeId}
 		)
 	</insert>
@@ -87,7 +89,7 @@
 				WHERE id = #{id}
 			</when>
 			<otherwise>
-				WHERE report_id = #{report.Id}
+				WHERE report_id = #{report.id}
 			</otherwise>
 		</choose>
 	</update>

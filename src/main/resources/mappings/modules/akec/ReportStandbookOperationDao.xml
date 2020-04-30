@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.ReportStandbookOperationDao">
+    
+	<sql id="reportStandbookOperationColumns">
+		a.id AS "id",
+		a.operate_date AS "operateDate",
+		a.operate_edate AS "operateEdate",
+		a.hospital_name AS "hospitalName",
+		a.hospital_id AS "hospitalId",
+		a.province_code AS "provinceCode",
+		a.province_name AS "provinceName",
+		a.city_name AS "cityName",
+		a.city_code AS "cityCode",
+		a.surgery_id AS "surgeryId",
+		a.surgery_grade AS "surgeryGrade",
+		a.user_name AS "userName",
+		a.user_id AS "user.id",
+		a.unit_count AS "unitCount",
+		a.create_date AS "createDate",
+		a.status AS "status",
+		a.update_date AS "updateDate",
+		a.update_admin_name AS "updateAdminName",
+		a.ak_count AS "akCount",
+		a.ak AS "ak",
+		u13.name AS "user.name"
+	</sql>
+	
+	<sql id="reportStandbookOperationJoins">
+		LEFT JOIN t_user u13 ON u13.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="ReportStandbookOperation">
+		SELECT 
+			<include refid="reportStandbookOperationColumns"/>
+		FROM t_report_standbook_operation a
+		<include refid="reportStandbookOperationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findOnlyList" resultType="ReportStandbookOperation">
+		SELECT
+		a.id
+		FROM t_report_standbook_operation a
+
+		<where>
+
+			<if test="operateDate != null and operateEdate != null and operateDate != '' and operateEdate != ''">
+				AND (a.operate_date BETWEEN #{operateDate} AND #{operateEdate}
+				OR a.operate_edate BETWEEN #{operateDate} AND #{operateEdate} )
+			</if>
+			<if test="hospitalName != null and hospitalName != ''">
+				AND a.hospital_name = #{hospitalName}
+			</if>
+			<if test="id != null and id != ''">
+				<![CDATA[
+				AND a.id <> #{id}
+				]]>
+			</if>
+
+		</where>
+
+	</select>
+	<select id="findList" resultType="ReportStandbookOperation">
+		SELECT 
+			<include refid="reportStandbookOperationColumns"/>
+		FROM t_report_standbook_operation a
+		<include refid="reportStandbookOperationJoins"/>
+		<where>
+			
+			<if test="beginOperateDate != null and endOperateDate != null and beginOperateDate != '' and endOperateDate != ''">
+				AND a.operate_date BETWEEN #{beginOperateDate} AND #{endOperateDate}
+			</if>
+			<if test="beginOperateEdate != null and endOperateEdate != null and beginOperateEdate != '' and endOperateEdate != ''">
+				AND a.operate_edate BETWEEN #{beginOperateEdate} AND #{endOperateEdate}
+			</if>
+			<if test="hospitalName != null and hospitalName != ''">
+				AND a.hospital_name like '%'+#{hospitalName}+'%'
+			</if>
+			<if test="provinceName != null and provinceName != ''">
+				AND a.province_name = #{provinceName}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="cityName != null and cityName != ''">
+				AND a.city_name = #{cityName}
+			</if>
+			<if test="surgeryId != null and surgeryId != ''">
+				AND a.surgery_id = #{surgeryId}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+			<if test="ak != null and ak != ''">
+				AND a.ak = #{ak}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReportStandbookOperation">
+		SELECT 
+			<include refid="reportStandbookOperationColumns"/>
+		FROM t_report_standbook_operation a
+		<include refid="reportStandbookOperationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_report_standbook_operation(
+			id,
+			operate_date,
+			operate_edate,
+			hospital_name,
+			hospital_id,
+			province_code,
+			province_name,
+			city_name,
+			city_code,
+			surgery_id,
+			surgery_grade,
+			user_name,
+			user_id,
+			unit_count,
+			create_date,
+			status,
+			update_date,
+			update_admin_name,
+			ak_count,
+			ak
+		) VALUES (
+			#{id},
+			#{operateDate},
+			#{operateEdate},
+			#{hospitalName},
+			#{hospitalId},
+			#{provinceCode},
+			#{provinceName},
+			#{cityName},
+			#{cityCode},
+			#{surgeryId},
+			#{surgeryGrade},
+			#{userName},
+			#{user.id},
+			#{unitCount},
+			#{createDate},
+			#{status},
+			#{updateDate},
+			#{updateAdminName},
+			#{akCount},
+			#{ak}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_report_standbook_operation SET 	
+			operate_date = #{operateDate},
+			operate_edate = #{operateEdate},
+			hospital_name = #{hospitalName},
+			hospital_id = #{hospitalId},
+			province_code = #{provinceCode},
+			province_name = #{provinceName},
+			city_name = #{cityName},
+			city_code = #{cityCode},
+			surgery_id = #{surgeryId},
+			surgery_grade = #{surgeryGrade},
+			user_name = #{userName},
+			user_id = #{user.id},
+			unit_count = #{unitCount},
+			status = #{status},
+			update_date = #{updateDate},
+			update_admin_name = #{updateAdminName},
+			ak_count = #{akCount},
+			ak = #{ak}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_report_standbook_operation
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

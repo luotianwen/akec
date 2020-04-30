@@ -14,6 +14,7 @@
 	</sql>
 	
 	<sql id="regionJoins">
+
 	</sql>
     
 	<select id="get" resultType="Region">
@@ -29,17 +30,17 @@
 			<include refid="regionColumns"/>
 		FROM t_region a
 		<include refid="regionJoins"/>
+
 		<where>
-			
+			a.level =3
 			<if test="name != null and name != ''">
-				AND a.name LIKE 
-					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+				and   a.name like ('%' + #{name} + '%') escape '/'
 			</if>
-			<if test="status != null and status != ''">
-				AND a.status = #{status}
+			<if test="parentCode != null and parentCode != ''">
+				AND a.parent_code =#{parentCode}
 			</if>
+
+
 			<if test="degree != null and degree != ''">
 				AND a.degree = #{degree}
 			</if>
@@ -91,7 +92,37 @@
 			#{degree}
 		)
 	</insert>
-	
+
+	<select id="queryHosptail" resultType="Region" >
+		SELECT
+				t.id,
+				t.name
+		FROM t_region t
+		WHERE t.status = '1'
+		AND t.level =3
+		<if test="parentCode != null and parentCode != ''">
+			AND t.parent_code = #{parentCode}
+		</if>
+		ORDER BY t.parent_code,t.seqno
+	</select>
+
+	<select id="queryProvince" resultType="Region">
+
+		SELECT  t.name,
+		t.code,
+		t.seqno
+		FROM t_region t
+		WHERE t.status = '1'
+		<if test="level != null and level != ''">
+		AND t.level = #{level}
+		</if>
+		<if test="parentCode != null and parentCode != ''">
+			AND t.parent_code = #{parentCode}
+		</if>
+		ORDER BY t.code
+
+
+	</select>
 	<update id="update">
 		UPDATE t_region SET 	
 			code = #{code},

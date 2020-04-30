@@ -43,5 +43,12 @@ public class RegionService extends CrudService<RegionDao, Region> {
 	public void delete(Region region) {
 		super.delete(region);
 	}
-	
+
+    public List<Region> queryProvince(Region region) {
+		return dao.queryProvince(region);
+    }
+
+	public List<Region> queryHosptail(Region region) {
+		return dao.queryHosptail(region);
+	}
 }

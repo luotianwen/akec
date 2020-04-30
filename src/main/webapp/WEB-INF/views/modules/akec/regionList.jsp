@@ -28,9 +28,6 @@
 			<li><label>名称：</label>
 				<form:input path="name" htmlEscape="false" maxlength="200" class="input-medium"/>
 			</li>
-			<li><label>状态：</label>
-				<form:input path="status" htmlEscape="false" maxlength="1" class="input-medium"/>
-			</li>
 			<li><label>医院等级：</label>
 				<form:input path="degree" htmlEscape="false" maxlength="30" class="input-medium"/>
 			</li>
@@ -43,26 +40,34 @@
 		<thead>
 			<tr>
 				<th>名称</th>
-				<th>状态</th>
+				<th>省</th>
+				<th>市</th>
 				<th>医院等级</th>
+				<th>状态</th>
 				<shiro:hasPermission name="akec:region:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="region">
 			<tr>
-				<td><a href="${ctx}/akec/region/form?id=${region.id}">
+				<td>
 					${region.name}
-				</a></td>
+				 </td>
 				<td>
-					${region.status}
+						${region.provinceName}
 				</td>
 				<td>
-					${region.degree}
+						${region.cityName}
 				</td>
+				<td>
+						${region.degree}
+				</td>
+				<td>
+						${fns:getDictLabel(region.status, 'yes_no', '')}
+				</td>
+
 				<shiro:hasPermission name="akec:region:edit"><td>
     				<a href="${ctx}/akec/region/form?id=${region.id}">修改</a>
-					<a href="${ctx}/akec/region/delete?id=${region.id}" onclick="return confirmx('确认要删除该医院信息吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

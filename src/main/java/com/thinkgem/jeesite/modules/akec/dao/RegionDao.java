@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.akec.entity.Region;
 
+import java.util.List;
+
 /**
  * 医院信息DAO接口
  * @author 医院信息
@@ -14,5 +16,8 @@ import com.thinkgem.jeesite.modules.akec.entity.Region;
  */
 @MyBatisDao
 public interface RegionDao extends CrudDao<Region> {
-	
+
+    List<Region> queryProvince(Region region);
+
+    List<Region> queryHosptail(Region region);
 }

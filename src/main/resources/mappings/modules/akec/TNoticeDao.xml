@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.TNoticeDao">
+    
+	<sql id="tNoticeColumns">
+		a.id AS "id",
+		a.seqno AS "seqno",
+		a.title AS "title",
+		a.content AS "content",
+		a.status AS "status",
+		a.range AS "range",
+		a.range_name AS "rangeName",
+		a.range_value AS "rangeValue",
+		a.release_date AS "releaseDate"
+	</sql>
+	
+	<sql id="tNoticeJoins">
+	</sql>
+    
+	<select id="get" resultType="TNotice">
+		SELECT 
+			<include refid="tNoticeColumns"/>
+		FROM t_notice a
+		<include refid="tNoticeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findUnreadList" resultType="TNotice">
+		 SELECT  t.id,
+			    t.title,
+			    t.content,
+			   CONVERT(VARCHAR(100),t.release_date,20)  as  "releaseDate",
+			    r.user_id,
+			    t.seqno
+		FROM  t_notice t
+		INNER JOIN t_notice_record r
+		ON t.id = r.notice_id
+		WHERE r.user_id= #{range}
+		AND t.status = '1'
+		<if test="title != null and title != ''">
+			AND t.title LIKE '%'+#{title}+'%'
+		</if>
+	</select>
+	<select id="findList" resultType="TNotice">
+		SELECT 
+			<include refid="tNoticeColumns"/>
+		FROM t_notice a
+		<include refid="tNoticeJoins"/>
+		<where>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TNotice">
+		SELECT 
+			<include refid="tNoticeColumns"/>
+		FROM t_notice a
+		<include refid="tNoticeJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_notice(
+			id,
+			seqno,
+			title,
+			content,
+			status,
+			range,
+			range_name,
+			range_value,
+			release_date
+		) VALUES (
+			#{id},
+			#{seqno},
+			#{title},
+			#{content},
+			#{status},
+			#{range},
+			#{rangeName},
+			#{rangeValue},
+			#{releaseDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_notice SET 	
+			seqno = #{seqno},
+			title = #{title},
+			content = #{content},
+			status = #{status},
+			range = #{range},
+			range_name = #{rangeName},
+			range_value = #{rangeValue},
+			release_date = #{releaseDate}
+		WHERE id = #{id}
+	</update>
+	<delete id="deleteNoticeUserRead" >
+		DELETE
+		FROM t_notice_record
+		WHERE user_id= #{ range }
+		AND notice_id =#{id}
+	</delete>
+	<update id="delete">
+		DELETE FROM t_notice
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

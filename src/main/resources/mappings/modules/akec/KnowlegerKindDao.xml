@@ -59,6 +59,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
+				ORDER BY seqno asc
 			</otherwise>
 		</choose>
 	</select>

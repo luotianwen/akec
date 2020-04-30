@@ -14,6 +14,24 @@
 			$("#searchForm").submit();
         	return false;
         }
+        var fid="";
+        function cpass(id){
+            fid=id;
+            $('#tmyModal').modal();
+		}
+        function tcheckDeliver() {
+            var pass = $("#pass").val();
+            if (pass == '') {
+                top.$.jBox.alert("请填写密码");
+                return;
+            }
+
+            $("#searchForm").attr("action", "${ctx}/akec/appUser/pass?id=" + fid);
+
+            $("#searchForm").submit();
+
+
+        }
 	</script>
 </head>
 <body>
@@ -35,12 +53,15 @@
 				<form:input path="dealerId" htmlEscape="false" maxlength="32" class="input-medium"/>
 			</li>
 			<li><label>状态：</label>
-				<form:input path="auditStatus" htmlEscape="false" maxlength="1" class="input-medium"/>
-			</li>
-			<li><label>创建类型：</label>
-				<form:select path="createType" class="input-medium">
+				<form:select path="auditStatus" class="input-medium">
 					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('create_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<form:options items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</li>
+			<li><label>	报台人类型：</label>
+				<form:select path="baseReportId" class="input-medium">
+					<form:option value="" label=""/>
+					<form:options items="${basedataList}" itemLabel="paramName" itemValue="id" htmlEscape="false"/>
 				</form:select>
 			</li>
 			<li><label>允许输入：</label>
@@ -52,56 +73,81 @@
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
+
+		<div class="modal fade" id="tmyModal" tabindex="-1" role="dialog" aria-labelledby="tmyModalLabel"
+			 aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="tmyModalLabel">
+							重置密码
+						</h4>
+					</div>
+					<div class="modal-body">
+						<label class="span1 control-label">密码：</label>
+						<div class="span2 ">
+							<form:input path="pass" class="input-medium "/>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+						</button>
+						<button type="button" class="btn btn-primary" onclick="tcheckDeliver()" data-dismiss="modal">
+							确认
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<sys:tableSort id="orderBy" name="orderBy" value="${page.orderBy}" callback="page();"/>
 	</form:form>
 	<sys:message content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>账号名</th>
-				<th>用户名</th>
-				<th>经销商</th>
-				<th>注册所属单位名字</th>
-				<th>经销商名字</th>
-				<th>系统参数表</th>
-				<th>状态</th>
-				<th>创建类型</th>
-				<th>允许输入</th>
+				<th class="sort-column account">账号名</th>
+				<th class="sort-column name">用户名</th>
+				<th class="sort-column base_report_id">报台人类型</th>
+				<th class="sort-column dealer_id">所属单位</th>
+				<th class="sort-column create_date" >创建时间</th>
+				<th class="sort-column audit_status">状态</th>
+				<th class="sort-column input_flag">允许输入</th>
+
 				<shiro:hasPermission name="akec:appUser:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="appUser">
 			<tr>
-				<td><a href="${ctx}/akec/appUser/form?id=${appUser.id}">
+				<td>
 					${appUser.account}
-				</a></td>
+				 </td>
 				<td>
 					${appUser.name}
 				</td>
 				<td>
-					${appUser.dealerId}
+						${appUser.baseReportName}
 				</td>
-				<td>
-					${appUser.registerDealerName}
-				</td>
+
 				<td>
 					${appUser.dealerName}
 				</td>
 				<td>
-					${appUser.baseReportId}
+					<fmt:formatDate value="${appUser.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${appUser.auditStatus}
+						${fns:getDictLabel(appUser.auditStatus, 'yes_no', '')}
 				</td>
 				<td>
-					${fns:getDictLabel(appUser.createType, 'create_type', '')}
+						${fns:getDictLabel(appUser.inputFlag, 'yes_no', '')}
 				</td>
-				<td>
-					${fns:getDictLabel(appUser.inputFlag, 'yes_no', '')}
-				</td>
+
 				<shiro:hasPermission name="akec:appUser:edit"><td>
     				<a href="${ctx}/akec/appUser/form?id=${appUser.id}">修改</a>
-					<a href="${ctx}/akec/appUser/delete?id=${appUser.id}" onclick="return confirmx('确认要删除该APP用户管理吗？', this.href)">删除</a>
+					<a style="cursor: pointer;" onclick="cpass('${appUser.id}')" )>重置密码</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

@@ -4,7 +4,7 @@
     
 	<sql id="reportStandbookProductDetailColumns">
 		a.id AS "id",
-		a.report_id AS "report.Id",
+		a.report_id AS "report.id",
 		a.product_id AS "productId",
 		a.individualcode AS "individualcode",
 		a.integral AS "integral",
@@ -14,10 +14,23 @@
 		a.scan_code AS "scanCode",
 		a.produce_date AS "produceDate",
 		a.outdate AS "outdate",
-		b.type AS "report.type"
+		b.type AS "report.type",
+		p.type_name as "product.typeName",
+		p.series_name as "product.seriesName",
+		p.bar_code AS "product.barCode",
+		p.code AS "product.code",
+		p.material_code AS "product.materialCode",
+		p.material_desc AS "product.materialDesc",
+		b.create_date AS "report.createDate",
+		b.surgery_id AS "report.surgeryId",
+		b.operate_date AS "report.operateDate",
+		b.hospital_name AS "report.hospitalName",
+		b.user_id AS "report.userId",
+		p.material_spe_desc AS "product.materialSpeDesc"
 	</sql>
 	
 	<sql id="reportStandbookProductDetailJoins">
+		LEFT JOIN t_product p on p.id=a.product_id
 		LEFT JOIN t_report_standbook b ON b.id = a.report_id
 	</sql>
     
@@ -36,8 +49,14 @@
 		<include refid="reportStandbookProductDetailJoins"/>
 		<where>
 			
-			<if test="report != null and report.Id != null and report.Id != ''">
-				AND a.report_id = #{report.Id}
+			<if test="report != null and report.id != null and report.id != ''">
+				AND a.report_id = #{report.id}
+			</if>
+			<if test="report != null and report.userId != null and report.userId != ''">
+				AND b.user_id = #{report.userId}
+			</if>
+			<if test="individualcode != null   and individualcode!= ''">
+				AND a.individualcode = #{individualcode}
 			</if>
 		</where>
 		<choose>
@@ -81,7 +100,7 @@
 			outdate
 		) VALUES (
 			#{id},
-			#{report.Id},
+			#{report.id},
 			#{productId},
 			#{individualcode},
 			#{integral},
@@ -115,9 +134,38 @@
 				WHERE id = #{id}
 			</when>
 			<otherwise>
-				WHERE report_id = #{report.Id}
+				WHERE report_id = #{report.id}
 			</otherwise>
 		</choose>
 	</update>
-	
+    <select id="countReprotProduct"   resultType="INTEGER" >
+        SELECT 		count(tp.id) report_count
+        FROM t_report_standbook t
+        INNER JOIN t_report_standbook_product_detail tp
+        ON t.id = tp.report_id
+        LEFT OUTER JOIN t_product p
+        ON tp.product_id = p.id
+        WHERE t.type = #{type}
+        AND tp.Individualcode =#{individualcode}
+        AND p.code =#{scanCode}
+        AND t.status = '1'
+        <if test="report!=null and report.id!=null and report.id != '' ">
+            AND not exists(select tpp.id from t_report_standbook_product_detail tpp  inner join t_report_standbook rs on rs.id = tpp.report_id where rs.status = '1' and  tpp.Individualcode =#{individualcode} and tpp.report_id =#{report.id} )
+        </if>
+    </select>
+    <select id="countHistoryReprotProduct"  resultType="INTEGER" >
+        SELECT 		count(*) report_count
+        FROM t_report_history t
+        WHERE CHARINDEX(','+#{individualcode}+',',','+t.product_indivualcodes+',',0) >0
+        AND t.status = '1'
+        <if test="type == '1'.toString()">
+            AND t.ak_bt = '1'
+        </if>
+        <if test="type == '2'.toString()">
+            AND t.dealer_bt = '1'
+        </if>
+        <if test="report!=null and report.id!=null and report.id != '' ">
+            AND not exists(select tpp.id from t_report_standbook_product_detail tpp inner join t_report_standbook rs on rs.id = tpp.report_id where rs.status = '1' and tpp.Individualcode =#{individualcode} and tpp.report_id =#{report.id}  )
+        </if>
+    </select>
 </mapper>

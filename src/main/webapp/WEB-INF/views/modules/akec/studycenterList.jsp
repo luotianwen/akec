@@ -48,11 +48,12 @@
 		<thead>
 			<tr>
 				<th>标题</th>
-				<th>链接地址</th>
+
 				<th>序号</th>
 				<th>状态</th>
 				<th>发布日期</th>
-				<th>kkid</th>
+				<th>所属分类</th>
+				<th>链接地址</th>
 				<shiro:hasPermission name="akec:studycenter:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -62,9 +63,7 @@
 				<td><a href="${ctx}/akec/studycenter/form?id=${studycenter.id}">
 					${studycenter.title}
 				</a></td>
-				<td>
-					${studycenter.href}
-				</td>
+
 				<td>
 					${studycenter.seqno}
 				</td>
@@ -75,7 +74,10 @@
 					<fmt:formatDate value="${studycenter.releaseDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${studycenter.kk.id}
+					${studycenter.kk.name}
+				</td>
+				<td>
+						${studycenter.href}
 				</td>
 				<shiro:hasPermission name="akec:studycenter:edit"><td>
     				<a href="${ctx}/akec/studycenter/form?id=${studycenter.id}">修改</a>

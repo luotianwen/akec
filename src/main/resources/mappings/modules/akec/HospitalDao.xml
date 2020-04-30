@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.HospitalDao">
+    
+	<sql id="hospitalColumns">
+		a.id AS "id",
+		a.hospital_name AS "hospitalName",
+		a.hospital_id AS "hospitalId",
+		a.province_code AS "provinceCode",
+		a.province_name AS "provinceName",
+		a.city_name AS "cityName",
+		a.city_code AS "cityCode",
+		a.user_name AS "userName",
+		a.user_id AS "user.id",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.ak_count AS "akCount",
+		a.unit_count AS "unitCount",
+		a.year AS "year",
+		a.update_admin_name AS "updateAdminName",
+		u9.name AS "user.name"
+	</sql>
+	
+	<sql id="hospitalJoins">
+		LEFT JOIN t_user u9 ON u9.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="Hospital">
+		SELECT 
+			<include refid="hospitalColumns"/>
+		FROM t_hospital a
+		<include refid="hospitalJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Hospital">
+		SELECT 
+			<include refid="hospitalColumns"/>
+		FROM t_hospital a
+		<include refid="hospitalJoins"/>
+		<where>
+			
+			<if test="hospitalName != null and hospitalName != ''">
+				AND a.hospital_name like '%'+#{hospitalName}+'%'
+			</if>
+			<if test="provinceName != null and provinceName != ''">
+				AND a.province_name = #{provinceName}
+			</if>
+			<if test="year != null and year != ''">
+				AND a.year = #{year}
+			</if>
+			<if test="cityName != null and cityName != ''">
+				AND a.city_name = #{cityName}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND a.user_name = #{userName}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.update_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="updateAdminName != null and updateAdminName != ''">
+				AND a.update_admin_name = #{updateAdminName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Hospital">
+		SELECT 
+			<include refid="hospitalColumns"/>
+		FROM t_hospital a
+		<include refid="hospitalJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_hospital(
+			id,
+			hospital_name,
+			hospital_id,
+			province_code,
+			province_name,
+			city_name,
+			city_code,
+			user_name,
+			user_id,
+			create_date,
+			update_date,
+			ak_count,
+			unit_count,
+			year,
+			update_admin_name
+		) VALUES (
+			#{id},
+			#{hospitalName},
+			#{hospitalId},
+			#{provinceCode},
+			#{provinceName},
+			#{cityName},
+			#{cityCode},
+			#{userName},
+			#{user.id},
+			#{createDate},
+			#{createDate},
+			#{akCount},
+			#{unitCount},
+			#{year},
+			#{updateAdminName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_hospital SET 	
+			hospital_name = #{hospitalName},
+			hospital_id = #{hospitalId},
+			province_code = #{provinceCode},
+			province_name = #{provinceName},
+			city_name = #{cityName},
+			city_code = #{cityCode},
+			user_name = #{userName},
+			user_id = #{user.id},
+			update_date = #{updateDate},
+			ak_count=#{akCount},
+			unit_count=#{unitCount},
+			year=#{year},
+			update_admin_name = #{updateAdminName}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_hospital
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

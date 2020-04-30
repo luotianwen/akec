@@ -57,31 +57,33 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>经销商编码</th>
-				<th>是否计分</th>
-				<th>原有编码</th>
+				<th>原始编码</th>
+				<th>业务区域</th>
+				<th>业务省份</th>
 				<th>市场</th>
 				<th>财务区域</th>
 				<th>财务省区</th>
-				<th>经销商名称</th>
+				<th>编码</th>
+				<th>名称</th>
 				<th>资质有效期</th>
-				<th>状态</th>
 				<th>业务统计客户编码</th>
 				<th>业务统计客户名称</th>
+				<th>是否计分</th>
+				<th>状态</th>
 				<shiro:hasPermission name="akec:dealer:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="dealer">
 			<tr>
-				<td><a href="${ctx}/akec/dealer/form?id=${dealer.id}">
-					${dealer.code}
-				</a></td>
-				<td>
-					${fns:getDictLabel(dealer.isRecordIntegral, 'yes_no', '')}
-				</td>
 				<td>
 					${dealer.originalCode}
+				 </td>
+				<td>
+						${dealer.businessRegion}
+				</td>
+				<td>
+						${dealer.businessProvince}
 				</td>
 				<td>
 					${dealer.market}
@@ -93,24 +95,31 @@
 					${dealer.financeProvince}
 				</td>
 				<td>
+						${dealer.code}
+				</td>
+				<td>
 					${dealer.name}
 				</td>
 				<td>
 					${dealer.qualityValidity}
 				</td>
-				<td>
-					${fns:getDictLabel(dealer.status, 'yes_no', '')}
-				</td>
+
 				<td>
 					${dealer.businessStaticsCode}
 				</td>
 				<td>
 					${dealer.businessStaticsName}
 				</td>
+				<td>
+						${fns:getDictLabel(dealer.isRecordIntegral, 'yes_no', '')}
+				</td>
+				<td>
+						${fns:getDictLabel(dealer.status, 'yes_no', '')}
+				</td>
+
 				<shiro:hasPermission name="akec:dealer:edit"><td>
     				<a href="${ctx}/akec/dealer/form?id=${dealer.id}">修改</a>
-					<a href="${ctx}/akec/dealer/delete?id=${dealer.id}" onclick="return confirmx('确认要删除该经销商信息吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
+					 	</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
 		</tbody>

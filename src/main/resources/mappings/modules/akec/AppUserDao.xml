@@ -9,8 +9,9 @@
 		a.pass AS "pass",
 		a.dealer_id AS "dealerId",
 		a.register_dealer_name AS "registerDealerName",
-		a.dealer_name AS "dealerName",
+		 isnull(a.dealer_name,a.register_dealer_name)  AS "dealerName",
 		a.base_report_id AS "baseReportId",
+		b.param_name AS "baseReportName",
 		a.audit_status AS "auditStatus",
 		a.note AS "note",
 		a.create_date AS "createDate",
@@ -21,6 +22,7 @@
 	</sql>
 	
 	<sql id="appUserJoins">
+		left join t_basedata b on   a.base_report_id = b.id
 	</sql>
     
 	<select id="get" resultType="AppUser">
@@ -37,15 +39,15 @@
 		FROM t_user a
 		<include refid="appUserJoins"/>
 		<where>
-			
+			<if test="baseReportId != null and baseReportId != ''">
+				AND a.base_report_id = #{baseReportId}
+			</if>
 			<if test="account != null and account != ''">
 				AND a.account = #{account}
 			</if>
 			<if test="name != null and name != ''">
 				AND a.name LIKE 
-					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+					  '%'+#{name}+'%'
 			</if>
 			<if test="dealerId != null and dealerId != ''">
 				AND a.dealer_id = #{dealerId}
@@ -65,6 +67,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
+				ORDER BY a.create_date desc
 			</otherwise>
 		</choose>
 	</select>
@@ -144,5 +147,61 @@
 		DELETE FROM t_user
 		WHERE id = #{id}
 	</update>
-	
+
+	<update id="pass"  >
+        UPDATE	t_user
+        SET
+        pass = #{pass}
+        WHERE id = #{id}
+    </update>
+    <update id="modifyUser"  >
+        UPDATE	t_user
+        SET 	account = #{account},
+        name = #{name},
+        pass = #{pass}
+        WHERE id = #{id}
+    </update>
+
+	<update id="outUser"  >
+		UPDATE t_user
+		SET audit_status = '3'
+		WHERE account = #{account}
+	</update>
+	<update id="forgetUserPass"  >
+		UPDATE t_user
+		SET pass = #{pass}
+		WHERE account = #{account}
+	</update>
+    <update id="modifyUserPass"  >
+		UPDATE t_user
+		SET pass = #{pass}
+		WHERE id = #{id}
+	</update>
+	<update id="modifyUserReportType"  >
+		UPDATE t_user
+		SET base_report_id = (select id from t_basedata where param_code = '103' and base_id = (select id from t_basedata_type where base_type_code = '100'))
+		WHERE id = #{id}
+	</update>
+	<select id="queryUserInfo" resultType="AppUser" >
+		SELECT   <include refid="appUserColumns"/>
+		FROM  t_user a
+		left join t_basedata b on   a.base_report_id = b.id
+        WHERE a.account = #{account}
+	</select>
+
+    <select id="queryListUserBelongDealer" resultType="AppUser" >
+       SELECT  t.id,
+		  		t.account,
+		   		t.name
+		FROM  t_user t
+		WHERE t.dealer_id =#{dealerId}
+		AND t.id &lt;&gt; #{id}
+        <if test="name != null and name != ''">
+            AND (t.name LIKE  '%'+#{name}+'%' or t.account LIKE  '%'+#{name}+'%'  )
+        </if>
+		AND t.base_report_id &lt;&gt; (select id from t_basedata where param_code = '102' and base_id = (select id from t_basedata_type where base_type_code = '100'))
+		ORDER BY t.create_date desc
+    </select>
+
+
 </mapper>

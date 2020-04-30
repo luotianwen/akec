@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.akec.dao.DoctorDao">
+    
+	<sql id="doctorColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.hospital_name AS "hospitalName",
+		a.hospital_id AS "hospitalId",
+		a.doctor_name AS "doctorName",
+		a.technical AS "technical",
+		a.duties AS "duties",
+		a.sex AS "sex",
+		a.nation AS "nation",
+		a.tel AS "tel",
+		a.remarks AS "remarks",
+		a.create_date AS "createDate",
+		u9.name AS "user.name"
+	</sql>
+	
+	<sql id="doctorJoins">
+		LEFT JOIN t_user u9 ON u9.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="Doctor">
+		SELECT 
+			<include refid="doctorColumns"/>
+		FROM t_doctor a
+		<include refid="doctorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Doctor">
+		SELECT 
+			<include refid="doctorColumns"/>
+		FROM t_doctor a
+		<include refid="doctorJoins"/>
+		<where>
+			
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="hospitalName != null and hospitalName != ''">
+				AND a.hospital_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{hospitalName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{hospitalName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{hospitalName},'%')</if>
+			</if>
+			<if test="hospitalId != null and hospitalId != ''">
+				AND a.hospital_id = #{hospitalId}
+			</if>
+			<if test="doctorName != null and doctorName != ''">
+				AND a.doctor_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{doctorName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{doctorName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{doctorName},'%')</if>
+			</if>
+			<if test="technical != null and technical != ''">
+				AND a.technical = #{technical}
+			</if>
+			<if test="duties != null and duties != ''">
+				AND a.duties = #{duties}
+			</if>
+			<if test="sex != null and sex != ''">
+				AND a.sex = #{sex}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Doctor">
+		SELECT 
+			<include refid="doctorColumns"/>
+		FROM t_doctor a
+		<include refid="doctorJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_doctor(
+			id,
+			user_id,
+			hospital_name,
+			hospital_id,
+			doctor_name,
+			technical,
+			duties,
+			sex,
+			nation,
+			tel,
+			remarks,
+			create_date
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{hospitalName},
+			#{hospitalId},
+			#{doctorName},
+			#{technical},
+			#{duties},
+			#{sex},
+			#{nation},
+			#{tel},
+			#{remarks},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_doctor SET 	
+			user_id = #{user.id},
+			hospital_name = #{hospitalName},
+			hospital_id = #{hospitalId},
+			doctor_name = #{doctorName},
+			technical = #{technical},
+			duties = #{duties},
+			sex = #{sex},
+			nation = #{nation},
+			tel = #{tel},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_doctor
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

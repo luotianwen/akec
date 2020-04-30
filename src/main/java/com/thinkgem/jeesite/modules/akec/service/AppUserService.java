@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.akec.service;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.akec.web.MD5Util;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,5 +44,40 @@ public class AppUserService extends CrudService<AppUserDao, AppUser> {
 	public void delete(AppUser appUser) {
 		super.delete(appUser);
 	}
-	
+
+    public void modifyUserReportType(AppUser appUser) {
+		dao.modifyUserReportType(appUser);
+    }
+
+	public AppUser queryUserInfo(AppUser queryUser) {
+		return  dao.queryUserInfo(queryUser);
+	}
+
+    public List<AppUser> queryListUserBelongDealer(AppUser queryUser) {
+	    return dao.queryListUserBelongDealer(queryUser);
+    }
+    @Transactional(readOnly = false)
+    public boolean modifyUser(AppUser queryUser) {
+	    return dao.modifyUser(queryUser);
+    }
+
+    public boolean modifyUserPass(AppUser queryUser) {
+        return dao.modifyUserPass(queryUser);
+    }
+
+	public boolean forgetUserPass(AppUser queryUser) {
+		return dao.forgetUserPass(queryUser);
+	}
+	@Transactional(readOnly = false)
+    public void pass(AppUser appUser) {
+		String modifyPassword = appUser.getPass();
+
+			modifyPassword = MD5Util.GetMD5Code(modifyPassword);
+		appUser.setPass(modifyPassword);
+		dao.pass(appUser);
+    }
+	@Transactional(readOnly = false)
+	public boolean outUser(AppUser appUser) {
+		return dao.outUser(appUser);
+	}
 }
