@@ -245,8 +245,8 @@
 								<input id="reportStandbookImageDetailList{{idx}}_delFlag" name="reportStandbookImageDetailList[{{idx}}].delFlag" type="hidden" value="0"/>
 							</td>
 							<td>
+							    <img src="{{row.reportImgUrl}}" width="200px" height="200px"  >
 								<input id="reportStandbookImageDetailList{{idx}}_reportImgUrl" name="reportStandbookImageDetailList[{{idx}}].reportImgUrl" type="hidden" value="{{row.reportImgUrl}}" maxlength="100"/>
-								<sys:ckfinder input="reportStandbookImageDetailList{{idx}}_reportImgUrl" type="files" uploadPath="/akec/reportStandbook"  readonly="true"/>
 							</td>
 
 						</tr>//-->

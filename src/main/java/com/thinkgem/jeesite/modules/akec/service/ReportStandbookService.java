@@ -6,6 +6,7 @@ package com.thinkgem.jeesite.modules.akec.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.URLDecoder;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
@@ -288,15 +289,15 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 		reportStandbook.setCreateDate(new Date());
 		super.save(reportStandbook);
 
-		String realPath ="/"+ DateUtils.formatDate(new Date(),"yyyy/MM/") ;
-		FileUtils.createDirectory( FileUtils.path(Global.getUserfilesBaseDir()+realPath));
+		/*String realPath ="/"+ DateUtils.formatDate(new Date(),"yyyy/MM/") ;
+		FileUtils.createDirectory( FileUtils.path(Global.getUserfilesBaseDir()+realPath));*/
 
 		for (ReportStandbookImageDetail reportStandbookImageDetail : reportStandbook.getReportStandbookImageDetailList()) {
-			String uploadFileName= IdGen.uuid()+".jpg";
+		/*	String uploadFileName= IdGen.uuid()+".jpg";
 			File targetFile = new File(FileUtils.path(Global.getUserfilesBaseDir()+realPath), uploadFileName);
-			BASE64Decoder decoder = new BASE64Decoder();
-			try(OutputStream out = new FileOutputStream(targetFile)){
-				byte[] b = decoder.decodeBuffer(reportStandbookImageDetail.getReportImgUrl());
+			BASE64Decoder decoder = new BASE64Decoder();*/
+			/*try(OutputStream out = new FileOutputStream(targetFile)){
+				byte[] b = decoder.decodeBuffer(URLDecoder.decode(reportStandbookImageDetail.getReportImgUrl()));
 				for (int i = 0; i <b.length ; i++) {
 					if (b[i] <0) {
 						b[i]+=256;
@@ -305,12 +306,16 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 				out.write(b);
 				out.flush();
 				reportStandbookImageDetail.setReportImgUrl(realPath+uploadFileName);
+				System.out.println(realPath+uploadFileName);*/
+			if(reportStandbookImageDetail.getReportImgUrl().length()>300){
+				reportStandbookImageDetail.setReportImgUrl("");
+			}
 				reportStandbookImageDetail.setAddDate(new Date());
-			}catch (Exception e){
+			/*}catch (Exception e){
 				e.printStackTrace();
 				r.setCode(1);
 				return r;
-			}
+			}*/
 
 		}
 		/*

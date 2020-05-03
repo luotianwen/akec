@@ -2,10 +2,8 @@ package com.thinkgem.jeesite.modules.akec.web;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.thinkgem.jeesite.common.utils.CacheUtils;
-import com.thinkgem.jeesite.common.utils.DateUtils;
-import com.thinkgem.jeesite.common.utils.Encodes;
-import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.utils.*;
 import com.thinkgem.jeesite.common.utils.excel.JxlsTemplate;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.akec.dao.*;
@@ -20,11 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -1025,6 +1027,30 @@ public class AppController extends BaseController {
                 r.setCode(1);
             }
 
+        return r;
+    }
+    @RequestMapping("/upload")
+    @ResponseBody
+    public ReqResponse upload(@RequestParam("file") MultipartFile file, HttpServletRequest req)
+            throws IllegalStateException, IOException {
+
+        // 获取文件存储路径（绝对路径）
+        String path = Global.getUserfilesBaseDir();
+        String realPath =  Global.USERFILES_BASE_URL + "/" + DateUtils.getYear() + "/" + DateUtils.getMonth() + "/"+DateUtils.getDay();
+        FileUtils.createDirectory(FileUtils.path(path+"/"+realPath));
+
+        // 获取原文件名
+        String fileName = file.getOriginalFilename();
+        // 创建文件实例
+        File filePath = new File(path+ "/" +realPath, fileName);
+        // 如果文件目录不存在，创建目录
+        if (!filePath.getParentFile().exists()) {
+            filePath.getParentFile().mkdirs();
+        }
+        // 写入文件
+        file.transferTo(filePath);
+        ReqResponse r=new ReqResponse();
+        r.setData(realPath+"/"+fileName);
         return r;
     }
 }
