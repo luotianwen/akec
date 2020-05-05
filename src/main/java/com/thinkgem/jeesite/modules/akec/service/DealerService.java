@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.akec.service;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.akec.entity.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,5 +44,31 @@ public class DealerService extends CrudService<DealerDao, Dealer> {
 	public void delete(Dealer dealer) {
 		super.delete(dealer);
 	}
-	
+	@Transactional(readOnly = false)
+    public void tball() {
+		List<Dealer>ds=dao.tball();
+		for (Dealer p:ds
+		) {
+			Dealer p1=new Dealer();
+			p1.setCode(p.getCode());
+			List ss=dao.findList(p1);
+			if(ss==null||ss.size()==0){
+				super.save(p);
+			}
+		}
+    }
+	@Transactional(readOnly = false)
+	public void tbtoday() {
+		List<Dealer>ds=dao.tbtoday();
+		for (Dealer p:ds
+		) {
+			Dealer p1=new Dealer();
+			p1.setCode(p.getCode());
+			List ss=dao.findList(p1);
+			if(ss==null||ss.size()==0){
+				super.save(p);
+			}
+		}
+	}
+
 }

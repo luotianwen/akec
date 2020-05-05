@@ -72,7 +72,49 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+	<select id="tball" resultType="Sellproduct">
+
+		SELECT
+		a.material_desc AS "materialDesc",
+		a.bar_code AS "barCode",
+		a.material_specification_desc AS "materialSpecificationDesc",
+		a.type_code AS "typeCode",
+		a.series AS "series",
+		a.batch_code AS "batchCode",
+		a.dealer_code AS "dealerCode",
+		a.dealer_name AS "dealerName",
+		a.business_dealer_code AS "businessDealerCode",
+		a.business_dealer_name AS "businessDealerName",
+		a.individualcode AS "individualcode",
+		a.product_code AS "proudctCode",
+		a.material_code AS "materialCode",
+		a.comments AS "comments",
+		a.sale_type AS "saleType"
+		FROM  [192.168.1.6].[SBO_AKYC].[dbo].[v_sellproduct]  a
+
+	</select>
+	<select id="tbtoday" resultType="Sellproduct">
+
+		SELECT
+		a.material_desc AS "materialDesc",
+		a.bar_code AS "barCode",
+		a.material_specification_desc AS "materialSpecificationDesc",
+		a.type_code AS "typeCode",
+		a.series AS "series",
+		a.batch_code AS "batchCode",
+		a.dealer_code AS "dealerCode",
+		a.dealer_name AS "dealerName",
+		a.business_dealer_code AS "businessDealerCode",
+		a.business_dealer_name AS "businessDealerName",
+		a.individualcode AS "individualcode",
+		a.product_code AS "proudctCode",
+		a.material_code AS "materialCode",
+		a.comments AS "comments",
+		a.sale_type AS "saleType"
+		FROM  [192.168.1.6].[SBO_AKYC].[dbo].[v_sellproduct]  a
+where
+         CONVERT(VARCHAR(10),updatedate,120)=CONVERT(VARCHAR(10),GETDATE(),120)
+	</select>
 	<select id="findAllList" resultType="Sellproduct">
 		SELECT 
 			<include refid="sellproductColumns"/>

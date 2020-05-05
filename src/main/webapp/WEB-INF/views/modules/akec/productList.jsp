@@ -52,7 +52,9 @@
 					<form:options items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
+			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
+				<a href="${ctx}/akec/product/tball"> <input  class="btn btn-primary" type="button" value="同步所有产品"/></a>
+			</li>
 			<li class="clearfix"></li>
 		</ul>
 		<sys:tableSort id="orderBy" name="orderBy" value="${page.orderBy}" callback="page();"/>

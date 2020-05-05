@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.akec.service;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.akec.entity.Dealer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,5 +47,33 @@ public class SellproductService extends CrudService<SellproductDao, Sellproduct>
 
 	public List<Sellproduct> getByIndividualcode(Sellproduct sellproduct) {
 		return dao.getByIndividualcode(sellproduct);
+	}
+	@Transactional(readOnly = false)
+    public void tball() {
+		List<Sellproduct>ds=dao.tball();
+		for (Sellproduct p:ds
+		) {
+			Sellproduct p1=new Sellproduct();
+			p1.setIndividualcode(p.getIndividualcode());
+			p1.setProudctCode(p.getProudctCode());
+			List ss=dao.findList(p1);
+			if(ss==null||ss.size()==0){
+				super.save(p);
+			}
+		}
+    }
+	@Transactional(readOnly = false)
+	public void tbtoday() {
+		List<Sellproduct>ds=dao.tbtoday();
+		for (Sellproduct p:ds
+		) {
+			Sellproduct p1=new Sellproduct();
+			p1.setIndividualcode(p.getIndividualcode());
+			p1.setProudctCode(p.getProudctCode());
+			List ss=dao.findList(p1);
+			if(ss==null||ss.size()==0){
+				super.save(p);
+			}
+		}
 	}
 }

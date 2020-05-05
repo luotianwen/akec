@@ -79,5 +79,11 @@ public class ProductController extends BaseController {
 		addMessage(redirectAttributes, "删除产品信息成功");
 		return "redirect:"+Global.getAdminPath()+"/akec/product/?repage";
 	}
-
+	@RequiresPermissions("akec:product:edit")
+	@RequestMapping(value = "tball")
+	public String tball( RedirectAttributes redirectAttributes) {
+		productService.tbsy();
+		addMessage(redirectAttributes, "同步所有产品信息成功");
+		return "redirect:"+Global.getAdminPath()+"/akec/product/?repage";
+	}
 }

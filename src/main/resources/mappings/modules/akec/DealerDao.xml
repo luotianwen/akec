@@ -67,7 +67,48 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
+	<select id="tball" resultType="Dealer">
+
+		SELECT
+		a.code AS "code",
+
+		a.original_code AS "originalCode",
+		a.business_region AS "businessRegion",
+		a.business_province AS "businessProvince",
+		a.market AS "market",
+		a.finance_region AS "financeRegion",
+		a.finance_province AS "financeProvince",
+		a.name AS "name",
+		a.quality_validity AS "qualityValidity",
+
+		a.business_statics_code AS "businessStaticsCode",
+		a.business_statics_name AS "businessStaticsName"
+		FROM  [192.168.1.6].[SBO_AKYC].[dbo].[v_sapdealer]  a
+
+	</select>
+
+
+	<select id="tbtoday" resultType="Dealer">
+
+		SELECT
+		a.code AS "code",
+
+		a.original_code AS "originalCode",
+		a.business_region AS "businessRegion",
+		a.business_province AS "businessProvince",
+		a.market AS "market",
+		a.finance_region AS "financeRegion",
+		a.finance_province AS "financeProvince",
+		a.name AS "name",
+		a.quality_validity AS "qualityValidity",
+
+		a.business_statics_code AS "businessStaticsCode",
+		a.business_statics_name AS "businessStaticsName"
+		FROM  [192.168.1.6].[SBO_AKYC].[dbo].[v_sapdealer]  a
+		where
+         CONVERT(VARCHAR(10),updatedate,120)=CONVERT(VARCHAR(10),GETDATE(),120)
+	</select>
 	<select id="findAllList" resultType="Dealer">
 		SELECT 
 			<include refid="dealerColumns"/>

@@ -32,7 +32,51 @@
 		<include refid="productJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
+
+	<select id="findtbsyList" resultType="Product">
+		SELECT
+		a.code AS "code",
+		a.material_code AS "materialCode",
+		a.material_desc AS "materialDesc",
+		a.bar_code AS "barCode",
+		a.material_spe_desc AS "materialSpeDesc",
+		a.base_type_id AS "baseTypeId",
+		a.type_name AS "typeName",
+		a.base_series_id AS "baseSeriesId",
+		a.series_name AS "seriesName",
+		a.batch_code AS "batchCode",
+		a.stander_saleprice AS "standerSaleprice",
+		a.integral AS "integral",
+		a.is_record_unit AS "isRecordUnit",
+		a.is_verify_individualcode AS "isVerifyIndividualcode",
+		a.note AS "note",
+		a.status AS "status"
+		FROM [192.168.1.6].[SBO_AKYC].[dbo].[v_product] a
+
+	</select>
+	<select id="tbtoday" resultType="Product">
+		SELECT
+		a.code AS "code",
+		a.material_code AS "materialCode",
+		a.material_desc AS "materialDesc",
+		a.bar_code AS "barCode",
+		a.material_spe_desc AS "materialSpeDesc",
+		a.base_type_id AS "baseTypeId",
+		a.type_name AS "typeName",
+		a.base_series_id AS "baseSeriesId",
+		a.series_name AS "seriesName",
+		a.batch_code AS "batchCode",
+		a.stander_saleprice AS "standerSaleprice",
+		a.integral AS "integral",
+		a.is_record_unit AS "isRecordUnit",
+		a.is_verify_individualcode AS "isVerifyIndividualcode",
+		a.note AS "note",
+		a.status AS "status"
+		FROM [192.168.1.6].[SBO_AKYC].[dbo].[v_product] a
+where
+         CONVERT(VARCHAR(10),updatedate,120)=CONVERT(VARCHAR(10),GETDATE(),120)
+	</select>
 	<select id="findList" resultType="Product">
 		SELECT 
 			<include refid="productColumns"/>

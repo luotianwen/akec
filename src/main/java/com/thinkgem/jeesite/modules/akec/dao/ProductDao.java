@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.akec.entity.Product;
 
+import java.util.List;
+
 /**
  * 产品信息DAO接口
  * @author 产品信息
@@ -14,5 +16,8 @@ import com.thinkgem.jeesite.modules.akec.entity.Product;
  */
 @MyBatisDao
 public interface ProductDao extends CrudDao<Product> {
-	
+
+    List<Product> findtbsyList();
+
+    List<Product> tbtoday();
 }

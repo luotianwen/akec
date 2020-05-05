@@ -79,5 +79,11 @@ public class DealerController extends BaseController {
 		addMessage(redirectAttributes, "删除经销商信息成功");
 		return "redirect:"+Global.getAdminPath()+"/akec/dealer/?repage";
 	}
-
+	@RequiresPermissions("akec:dealer:edit")
+	@RequestMapping(value = "tball")
+	public String tball(RedirectAttributes redirectAttributes) {
+		dealerService.tball();
+		addMessage(redirectAttributes, "同步所有经销商信息成功");
+		return "redirect:"+Global.getAdminPath()+"/akec/dealer/?repage";
+	}
 }

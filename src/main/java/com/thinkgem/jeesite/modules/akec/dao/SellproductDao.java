@@ -18,4 +18,8 @@ import java.util.List;
 public interface SellproductDao extends CrudDao<Sellproduct> {
 
     List<Sellproduct> getByIndividualcode(Sellproduct sellproduct);
+
+    List<Sellproduct> tball();
+
+    List<Sellproduct> tbtoday();
 }

@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.akec.entity.Dealer;
 
+import java.util.List;
+
 /**
  * 经销商信息DAO接口
  * @author 经销商信息
@@ -14,5 +16,8 @@ import com.thinkgem.jeesite.modules.akec.entity.Dealer;
  */
 @MyBatisDao
 public interface DealerDao extends CrudDao<Dealer> {
-	
+
+    List<Dealer> tball();
+
+    List<Dealer> tbtoday();
 }

@@ -43,5 +43,38 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	public void delete(Product product) {
 		super.delete(product);
 	}
-	
+	@Transactional(readOnly = false)
+    public void tbsy() {
+         List<Product> ps=dao.findtbsyList();
+		for (Product p:ps
+			 ) {
+			Product p1=new Product();
+			p1.setCode(p.getCode());
+			List<Product> ss=dao.findList(p1);
+			if(ss==null||ss.size()==0){
+				super.save(p);
+			}else{
+				p.setStatus(ss.get(0).getStatus());
+				p.setId(ss.get(0).getId());
+				super.save(p);
+			}
+		}
+    }
+	@Transactional(readOnly = false)
+	public void tbtoday() {
+		List<Product> ps=dao.tbtoday();
+		for (Product p:ps
+		) {
+			Product p1=new Product();
+			p1.setCode(p.getCode());
+			List<Product> ss=dao.findList(p1);
+			if(ss==null||ss.size()==0){
+				super.save(p);
+			}else{
+				p.setStatus(ss.get(0).getStatus());
+				p.setId(ss.get(0).getId());
+				super.save(p);
+			}
+		}
+	}
 }

@@ -79,5 +79,11 @@ public class SellproductController extends BaseController {
 		addMessage(redirectAttributes, "删除已售产品信息成功");
 		return "redirect:"+Global.getAdminPath()+"/akec/sellproduct/?repage";
 	}
-
+	@RequiresPermissions("akec:sellproduct:edit")
+	@RequestMapping(value = "tball")
+	public String tball(RedirectAttributes redirectAttributes) {
+		sellproductService.tball();
+		addMessage(redirectAttributes, "同步所有已售产品信息成功");
+		return "redirect:"+Global.getAdminPath()+"/akec/sellproduct/?repage";
+	}
 }

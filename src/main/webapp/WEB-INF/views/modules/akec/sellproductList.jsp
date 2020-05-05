@@ -40,7 +40,10 @@
 			<li><label>材料编码：</label>
 				<form:input path="materialCode" htmlEscape="false" maxlength="56" class="input-medium"/>
 			</li>
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
+			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
+				<a href="${ctx}/akec/sellproduct/tball"> <input  class="btn btn-primary" type="button" value="同步所有已销售产品"/></a>
+			</li>
+
 			<li class="clearfix"></li>
 		</ul>
 		<sys:tableSort id="orderBy" name="orderBy" value="${page.orderBy}" callback="page();"/>
