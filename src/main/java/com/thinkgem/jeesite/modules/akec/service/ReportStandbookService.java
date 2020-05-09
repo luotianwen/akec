@@ -167,7 +167,7 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
         Region region=new Region();
 
         region.setName(reportStandbook.getProvinceName());
-        List<Region> rs=regionService.findList(region);
+        List<Region> rs=regionService.findProList(region);
         if(rs==null||rs.size()==0){
             r.setCode(1);
             r.setMsg("省不存在 请重新选择医院");
@@ -177,7 +177,7 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
         region=new Region();
         region.setParentCode(reportStandbook.getProvinceCode());
         region.setName(reportStandbook.getCityName());
-        rs=regionService.findList(region);
+        rs=regionService.findProList(region);
         if(rs==null||rs.size()==0){
             r.setCode(1);
             r.setMsg("市不存在 请重新选择医院");
@@ -222,7 +222,9 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 		}
 		boolean isSave = !(reportStandbook.getId()!=null && reportStandbook.getId().length()>0);
 		Set<String> verifySet = new HashSet<String>();
+		int unitCount=0;
 		for(ReportStandbookProductDetail product:productList){
+			unitCount+=Integer.parseInt(product.getIsRecordUnit());
 			product.setIntegral("1");
 			String isVerifyindivualcode = product.getIsVerifyIndividualcode();
 			String indivualcode = product.getIndividualcode();
@@ -232,7 +234,7 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 				boolean putSuccess = verifySet.add(productVo.getCode()+indivualcode);
 				if(!putSuccess){
 					 r.setCode(1);
-					 r.setMsg("产品不唯一");
+					 r.setMsg(productVo.getCode()+"产品不唯一");
 					return r;
 				}
 				Sellproduct sp=new Sellproduct();
@@ -241,7 +243,7 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 				List<Sellproduct> sellProducts = sellproductService.findList(sp);
 				if(sellProducts == null||sellProducts.size()==0){
 					r.setCode(1);
-					r.setMsg("已售产品中未找到报台产品");
+					r.setMsg(productVo.getCode()+"已售产品中未找到报台产品"+indivualcode);
 					return r;
 
 				}
@@ -271,19 +273,21 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 					int reportProductCount = reportStandbookProductDetailDao.countReprotProduct(rd);
 					if(reportProductCount>0){
 						r.setCode(1);
-						r.setMsg("产品已被报台");
+						r.setMsg(productVo.getCode()+"产品已被报台"+indivualcode);
 						return r;
 					}
 					int historyReportProductCount = reportStandbookProductDetailDao.countHistoryReprotProduct(rd);
 					if(historyReportProductCount>0){
 						r.setCode(1);
-						r.setMsg("产品已被报台");
+						r.setMsg(productVo.getCode()+"产品已被报台"+indivualcode);
 						return r;
 					}
 
 
 			}
 		}
+
+		reportStandbook.setUnitCount(unitCount+"");
 		reportStandbook.setDealerName(dealerName);
 		reportStandbook.setStatus("1");
 		reportStandbook.setCreateDate(new Date());
@@ -361,5 +365,9 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 
 
 		return r;
+	}
+
+	public List<ReportStandbook> findAllList(ReportStandbook reportStandbook) {
+		return  dao.findAllList(reportStandbook);
 	}
 }

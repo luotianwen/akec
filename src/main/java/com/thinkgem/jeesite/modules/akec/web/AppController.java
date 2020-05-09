@@ -635,7 +635,7 @@ public class AppController extends BaseController {
         List<Product> ps=productService.findList(product);
         if(null==ps||ps.size()==0){
             r.setCode(1);
-            r.setMsg("系统中无此产品");
+            r.setMsg("系统中无此"+product.getMaterialCode()+"产品");
             return r;
         }
 

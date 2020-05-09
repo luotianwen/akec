@@ -20,4 +20,6 @@ public interface RegionDao extends CrudDao<Region> {
     List<Region> queryProvince(Region region);
 
     List<Region> queryHosptail(Region region);
+
+    List<Region> findProList(Region region);
 }

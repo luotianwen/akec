@@ -51,4 +51,8 @@ public class RegionService extends CrudService<RegionDao, Region> {
 	public List<Region> queryHosptail(Region region) {
 		return dao.queryHosptail(region);
 	}
+
+    public List<Region> findProList(Region region) {
+		return dao.findProList(region);
+    }
 }

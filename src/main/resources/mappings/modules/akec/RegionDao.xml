@@ -24,7 +24,23 @@
 		<include refid="regionJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
+	<select id="findProList" resultType="Region">
+		SELECT
+		<include refid="regionColumns"/>
+		FROM t_region a
+		<include refid="regionJoins"/>
+
+		<where>
+			<if test="name != null and name != ''">
+				and   a.name =#{name}
+			</if>
+			<if test="parentCode != null and parentCode != ''">
+				AND a.parent_code =#{parentCode}
+			</if>
+		</where>
+
+	</select>
 	<select id="findList" resultType="Region">
 		SELECT 
 			<include refid="regionColumns"/>
