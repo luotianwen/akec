@@ -362,6 +362,20 @@ public class AppController extends BaseController {
     /**
      *
 
+     * @Description: TODO(这里用一句话描述这个方法的作用)  删除查询
+
+     * @throws
+     */
+    @RequestMapping("/delReportStandbook")
+    @ResponseBody
+    public ReqResponse delReportStandbook(ReportStandbook reportStandbook){
+        ReqResponse r=new ReqResponse();
+        reportStandbookService.delete(reportStandbook);
+        return r;
+    }
+    /**
+     *
+
      * @Description: TODO(这里用一句话描述这个方法的作用)  报台查询
 
      * @throws
@@ -374,7 +388,7 @@ public class AppController extends BaseController {
 
         for (ReportStandbook r2:result
              ) {
-            if(DateUtils.pastHour(r2.getOperateDate())>24){
+            if(DateUtils.pastHour(r2.getCreateDate())>24){
                 r2.setShow(false);
             }
             else{
@@ -632,6 +646,7 @@ public class AppController extends BaseController {
     @ResponseBody
     public ReqResponse queryResultProductInfo(Product product){
         ReqResponse r=new ReqResponse();
+        product.setStatus("1");
         List<Product> ps=productService.findList(product);
         if(null==ps||ps.size()==0){
             r.setCode(1);

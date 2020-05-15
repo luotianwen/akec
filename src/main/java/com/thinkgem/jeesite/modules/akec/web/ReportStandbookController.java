@@ -95,7 +95,7 @@ public class ReportStandbookController extends BaseController {
 	 @RequestMapping("/exportListReportStandbook")
     public ReqResponse exportListReportStandbook(HttpServletResponse response,ReportStandbook reportStandbook){
         ReqResponse r=new ReqResponse();
-        List<ReportStandbook> result = reportStandbookService.findList(reportStandbook);
+        List<ReportStandbook> result = reportStandbookService.findAllList(reportStandbook);
 
         for (ReportStandbook r2:result
         ) {

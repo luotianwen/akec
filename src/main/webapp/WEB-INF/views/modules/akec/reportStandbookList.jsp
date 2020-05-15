@@ -78,6 +78,9 @@
 					<form:options items="${surgeryIds}" itemLabel="paramName" itemValue="id" htmlEscape="false"/>
 				</form:select>
 			</li>
+			<li><label>报台人：</label>
+				<form:input path="userName" htmlEscape="false" maxlength="100" class="input-medium"/>
+			</li>
 			<li><label>报台人单位：</label>
 				<form:input path="dealerName" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>

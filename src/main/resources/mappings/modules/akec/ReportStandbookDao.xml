@@ -74,7 +74,9 @@
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
 			</if>
-
+			<if test="userName != null and userName != ''">
+				AND a.user_name = #{userName}
+			</if>
 			<if test="dealerName != null and dealerName != ''">
 				AND d.name = #{dealerName}
 			</if>
@@ -143,6 +145,9 @@
 				AND a.status = #{status}
 			</if>
 
+			<if test="userName != null and userName != ''">
+				AND a.user_name = #{userName}
+			</if>
 			<if test="dealerName != null and dealerName != ''">
 				AND d.name = #{dealerName}
 			</if>
