@@ -52,9 +52,9 @@
 			<if test="report != null and report.id != null and report.id != ''">
 				AND a.report_id = #{report.id}
 			</if>
-			<if test="report != null and report.userId != null and report.userId != ''">
+			<!--<if test="report != null and report.userId != null and report.userId != ''">
 				AND b.user_id = #{report.userId}
-			</if>
+			</if>-->
 			<if test="individualcode != null   and individualcode!= ''">
 				AND a.individualcode = #{individualcode}
 			</if>
