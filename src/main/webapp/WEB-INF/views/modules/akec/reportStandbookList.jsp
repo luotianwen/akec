@@ -7,8 +7,9 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
             $("#export").click(function () {
-                top.$.jBox.confirm("确认要导出数据吗？", "系统提示", function (v, h, f) {
+                top.$.jBox.confirm("确认要导出数据吗？", "系统提示 数据量比较大稍等片刻", function (v, h, f) {
                     if (v == "ok") {
+                        $("#export").attr("disabled",true);
                         var oldAction = $("#searchForm").attr("action");
                         $("#searchForm").attr("target", "_blank");
                         $("#searchForm").attr("action", "${ctx}/akec/reportStandbook/exportListReportStandbook");

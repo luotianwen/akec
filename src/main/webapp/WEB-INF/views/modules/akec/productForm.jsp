@@ -100,9 +100,12 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">积分：</label>
+			<label class="control-label">是否返利：</label>
 			<div class="controls">
-				<form:input path="integral" htmlEscape="false" class="input-xlarge "/>
+				<form:select path="integral" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">

@@ -70,7 +70,7 @@
 				<th class="sort-column a.type_name">产品大类</th>
 				<th class="sort-column a.series_name">产品系列</th>
 				<th class="sort-column a.material_spe_desc">物料规格型号</th>
-				<th>产品积分</th>
+				<th>是否返利</th>
 				<th>标准售价</th>
 				<th class="sort-column a.is_verify_individualcode">是否校验个体码</th>
 				<th class="sort-column a.is_record_unit">是否记台</th>
@@ -107,7 +107,7 @@
 
 
 				<td>
-						${product.integral}
+						${fns:getDictLabel(product.integral, 'yes_no', '')}
 				</td>
 				<td>
 					${product.standerSaleprice}
