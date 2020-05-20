@@ -348,7 +348,7 @@
 
 								</td>
 								<td>
-								{{row.integral}}
+								{{row.sellproduct.comments}}
 
 								</td>
 								<td>

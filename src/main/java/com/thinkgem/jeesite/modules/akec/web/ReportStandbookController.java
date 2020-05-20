@@ -100,6 +100,7 @@ public class ReportStandbookController extends BaseController {
         for (ReportStandbook r2:result
         ) {
             r2.setPatientSex(r2.getPatientSex().equals("1")?"男":"女");
+			r2.setStatus(r2.getStatus().equals("1")?"启用":"禁用");
             r2.setType(r2.getType().equals("2")?"经销商报台":"直属/子公司人员报台");
             r2.setUser(appUserService.get(r2.getUserId()));
             r2.setSurgeryGrade(basedataDao.get(r2.getSurgeryId()).getParamName());
@@ -120,7 +121,20 @@ public class ReportStandbookController extends BaseController {
                     Sellproduct sellproduct = new Sellproduct();
                     sellproduct.setIndividualcode(rd.getIndividualcode());
                     sellproduct.setProudctCode(rd.getProduct().getCode());
-                    rd.setSellproduct(sellproductService.getByIndividualcode(sellproduct).get(0));
+
+					Sellproduct sellproduct2 = sellproductService.getByIndividualcode(sellproduct).get(0);
+					if(sellproduct2!=null){
+						if(StringUtils.isNotEmpty(sellproduct2.getComments())) {
+							sellproduct2.setComments(sellproduct2.getComments().contains("无报台返利")?"否":"是");
+						}
+						else{
+							sellproduct2.setComments("是");
+						}
+						rd.setSellproduct(sellproduct2);
+					}
+				else{
+						rd.setSellproduct(new Sellproduct());
+					}
                 }
 
             }
@@ -170,13 +184,21 @@ public class ReportStandbookController extends BaseController {
 		List<ReportStandbookProductDetail> ps=reportStandbook.getReportStandbookProductDetailList();
 		for (ReportStandbookProductDetail rd:ps
 		) {
-			rd.setIntegral(rd.getIntegral().equals("1")?"是":"否");
-			if(StringUtils.isNotEmpty(rd.getIndividualcode())) {
-				Sellproduct sellproduct = new Sellproduct();
-				sellproduct.setIndividualcode(rd.getIndividualcode());
-				sellproduct.setProudctCode(rd.getProduct().getCode());
-				rd.setSellproduct(sellproductService.getByIndividualcode(sellproduct).get(0));
+			Sellproduct sellproduct = new Sellproduct();
+			sellproduct.setIndividualcode(rd.getIndividualcode());
+			sellproduct.setProudctCode(rd.getProduct().getCode());
+
+			Sellproduct sellproduct2 = sellproductService.getByIndividualcode(sellproduct).get(0);
+			if(sellproduct2!=null){
+				if(StringUtils.isNotEmpty(sellproduct2.getComments())) {
+					sellproduct2.setComments(sellproduct2.getComments().contains("无报台返利")?"否":"是");
+				}
+				else{
+					sellproduct2.setComments("是");
+				}
+				rd.setSellproduct(sellproduct2);
 			}
+
 
 		}
 		reportStandbook.setUser(appUserService.get(reportStandbook.getUserId()));
