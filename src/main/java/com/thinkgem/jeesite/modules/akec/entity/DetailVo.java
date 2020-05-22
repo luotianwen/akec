@@ -35,6 +35,33 @@ public class DetailVo implements Serializable {
     private String comments;
     private String saleType;
 
+    public String getOperateDate2() {
+        return operateDate2;
+    }
+
+    public void setOperateDate2(String operateDate2) {
+        this.operateDate2 = operateDate2;
+    }
+
+    public String getCreateDate2() {
+        return createDate2;
+    }
+
+    public void setCreateDate2(String createDate2) {
+        this.createDate2 = createDate2;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    private String operateDate2;		// 报台时间
+    private String createDate2;		// 报台时间
+    private String createTime;		// 报台时间
     public String getBaseReportName() {
         return baseReportName;
     }
