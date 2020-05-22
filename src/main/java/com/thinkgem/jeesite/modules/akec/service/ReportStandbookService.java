@@ -15,6 +15,7 @@ import com.thinkgem.jeesite.common.mapper.JsonMapper;
 import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.utils.FileUtils;
 import com.thinkgem.jeesite.common.utils.IdGen;
+import com.thinkgem.jeesite.modules.akec.dao.*;
 import com.thinkgem.jeesite.modules.akec.entity.*;
 import com.thinkgem.jeesite.modules.akec.web.ReqResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.modules.akec.dao.ReportStandbookDao;
-import com.thinkgem.jeesite.modules.akec.dao.ReportStandbookGradeDetailDao;
-import com.thinkgem.jeesite.modules.akec.dao.ReportStandbookImageDetailDao;
-import com.thinkgem.jeesite.modules.akec.dao.ReportStandbookProductDetailDao;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -144,6 +141,8 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 
 	private static final String DEALER_TYPE = ",B18370AD648C42B79759D2B6DB04DF6B,B18370AD648C42B79759D2B6DB04DF6C,";
 
+	@Autowired
+	private BasedataDao basedataDao;
 	@Transactional(readOnly = false)
     public ReqResponse saveReportStandbook(ReportStandbook reportStandbook) {
 
@@ -162,6 +161,12 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 		}else if(DEALER_TYPE.indexOf(","+type+",")>=0){
 			type = "2";
 		}
+		String dealerName2= au.getDealerName();
+		reportStandbook.setBaseReportName(au.getBaseReportName());
+		reportStandbook.setDealerName2(dealerName2);
+		reportStandbook.setSurgeryGrade(basedataDao.get(reportStandbook.getSurgeryId()).getParamName());
+
+
 		reportStandbook.setType(type);
 		//市
         Region region=new Region();
@@ -231,6 +236,12 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 			product.setReport(reportStandbook);
 			if("1".equals(isVerifyindivualcode)){
 				Product productVo  = productService.get(product.getProductId());
+
+
+				product.setMaterialCode(productVo.getMaterialCode());
+				product.setMaterialDesc(productVo.getMaterialDesc());
+				product.setMaterialSpeDesc(productVo.getMaterialSpeDesc());
+
 				boolean putSuccess = verifySet.add(productVo.getCode()+indivualcode);
 				if(!putSuccess){
 					 r.setCode(1);
@@ -248,7 +259,18 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 
 				}
 				Sellproduct sellProduct=sellProducts.get(0);
+
+
+
+				product.setSeriesName(sellProduct.getSeries());
+				product.setDealerCode(sellProduct.getDealerCode());
+				product.setDealerName(sellProduct.getDealerName());
+				product.setComments(sellProduct.getComments().contains("无报台返利")?"否":"是");
+				product.setSaleType(sellProduct.getSaleType());
+
+
 				Dealer dv=new Dealer();
+
 				dv.setCode(sellProduct.getDealerCode());
 				List<Dealer> dealers= dealerService.findList(dv);
 
@@ -370,4 +392,8 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 	public List<ReportStandbook> findAllList(ReportStandbook reportStandbook) {
 		return  dao.findAllList(reportStandbook);
 	}
+
+    public List<DetailVo> excelList(ReportStandbook reportStandbook) {
+		return  dao.excelList(reportStandbook);
+    }
 }

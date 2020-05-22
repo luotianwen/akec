@@ -170,13 +170,13 @@
 		<div class="control-group">
 			<label class="control-label">报台人类型：</label>
 			<div class="controls">
-				<form:input path="user.baseReportName" htmlEscape="false" maxlength="100" class="input-xlarge "/>
+				<form:input path="baseReportName" htmlEscape="false" maxlength="100" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">报台人单位：</label>
 			<div class="controls">
-				<form:input path="user.dealerName" htmlEscape="false" maxlength="100" class="input-xlarge "/>
+				<form:input path="dealerName2" htmlEscape="false" maxlength="100" class="input-xlarge "/>
 			</div>
 		</div>
 			<div class="control-group">
@@ -324,10 +324,10 @@
 									{{row.product.barCode}}
 								</td>
 								<td>
-									{{row.product.materialDesc}}
+									{{row.materialDesc}}
 								</td>
 								<td>
-									{{row.sellproduct.dealerName}}
+									{{row.dealerName}}
 								</td>
 								<td>
 								<select  disabled data-value="{{row.isRecordUnit}}" class="input-small ">
@@ -348,7 +348,7 @@
 
 								</td>
 								<td>
-								{{row.sellproduct.comments}}
+								{{row.comments}}
 
 								</td>
 								<td>

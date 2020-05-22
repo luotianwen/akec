@@ -28,6 +28,81 @@ public class ReportStandbookProductDetail extends DataEntity<ReportStandbookProd
 	private String outdate;		// 失效日期
 	private Sellproduct  sellproduct;
 
+
+	private String materialCode;
+	private String materialDesc;
+	private String materialSpeDesc;
+
+	private String seriesName;
+	private String dealerCode;
+	private String dealerName;
+	private String comments;
+	private String saleType;
+
+	public String getMaterialCode() {
+		return materialCode;
+	}
+
+	public void setMaterialCode(String materialCode) {
+		this.materialCode = materialCode;
+	}
+
+	public String getMaterialDesc() {
+		return materialDesc;
+	}
+
+	public void setMaterialDesc(String materialDesc) {
+		this.materialDesc = materialDesc;
+	}
+
+	public String getMaterialSpeDesc() {
+		return materialSpeDesc;
+	}
+
+	public void setMaterialSpeDesc(String materialSpeDesc) {
+		this.materialSpeDesc = materialSpeDesc;
+	}
+
+	public String getSeriesName() {
+		return seriesName;
+	}
+
+	public void setSeriesName(String seriesName) {
+		this.seriesName = seriesName;
+	}
+
+	public String getDealerCode() {
+		return dealerCode;
+	}
+
+	public void setDealerCode(String dealerCode) {
+		this.dealerCode = dealerCode;
+	}
+
+	public String getDealerName() {
+		return dealerName;
+	}
+
+	public void setDealerName(String dealerName) {
+		this.dealerName = dealerName;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public String getSaleType() {
+		return saleType;
+	}
+
+	public void setSaleType(String saleType) {
+		this.saleType = saleType;
+	}
+
 	public Sellproduct getSellproduct() {
 		return sellproduct;
 	}

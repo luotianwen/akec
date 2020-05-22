@@ -411,37 +411,7 @@ public class AppController extends BaseController {
     @RequestMapping("/exportListReportStandbook")
     public ReqResponse exportListReportStandbook(HttpServletResponse response,ReportStandbook reportStandbook){
         ReqResponse r=new ReqResponse();
-        List<ReportStandbook> result = reportStandbookService.queryListReportStandbook(reportStandbook);
-
-        for (ReportStandbook r2:result
-        ) {
-            r2.setPatientSex(r2.getPatientSex().equals("1")?"男":"女");
-            r2.setType(r2.getType().equals("2")?"经销商报台":"直属/子公司人员报台");
-            r2.setUser(appUserService.get(r2.getUserId()));
-            r2.setSurgeryGrade(basedataDao.get(r2.getSurgeryId()).getParamName());
-            StringBuffer sb=new StringBuffer();
-            List<ReportStandbookGradeDetail> ss= reportStandbookGradeDetailDao.findList(new ReportStandbookGradeDetail(r2));
-            for (ReportStandbookGradeDetail rs:ss
-                 ) {
-                sb.append(rs.getGradeName()+":"+rs.getGrade()+",");
-            }
-
-           r2.setRemarks(sb.toString());
-
-            List<ReportStandbookProductDetail> ps= reportStandbookProductDetailDao.findList(new ReportStandbookProductDetail(r2));
-            for (ReportStandbookProductDetail rd:ps
-                 ) {
-                rd.setIntegral(rd.getIntegral().equals("1")?"是":"否");
-                if(StringUtils.isNotEmpty(rd.getIndividualcode())) {
-                    Sellproduct sellproduct = new Sellproduct();
-                    sellproduct.setIndividualcode(rd.getIndividualcode());
-                    sellproduct.setProudctCode(rd.getProduct().getCode());
-                    rd.setSellproduct(sellproductService.getByIndividualcode(sellproduct).get(0));
-                }
-
-            }
-            r2.setReportStandbookProductDetailList(ps);
-        }
+        List<DetailVo> result = reportStandbookService.excelList(reportStandbook);
 
         try {
             String fileName = "报台"+ DateUtils.getDate("yyyyMMdd")+".xls";
@@ -481,7 +451,6 @@ public class AppController extends BaseController {
     public ReqResponse getReportStandbook(ReportStandbook reportStandbook){
         ReqResponse r=new ReqResponse();
         ReportStandbook reportStandbook2= reportStandbookService.get(reportStandbook.getId());
-        reportStandbook2.setSurgeryGrade(basedataDao.get(reportStandbook2.getSurgeryId()).getParamName());
         r.setData(reportStandbook2);
         return r;
     }
@@ -927,7 +896,8 @@ public class AppController extends BaseController {
         List<ReportStandbookProductDetail> result= rspdao.findList(reportStandbookProductDetail);
         for (ReportStandbookProductDetail r2:result
         ) {
-            r2.setRemarks(appUserService.get(r2.getReport().getUserId()).getBaseReportName());
+            AppUser appUser= appUserService.get(r2.getReport().getUserId());
+            r2.setRemarks(appUser.getBaseReportName()+"-"+appUser.getName());
             r2.getReport().setSurgeryGrade(basedataDao.get(r2.getReport().getSurgeryId()).getParamName());
         }
         r.setData(result);

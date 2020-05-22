@@ -12,7 +12,7 @@
                         $("#export").attr("disabled",true);
                         var oldAction = $("#searchForm").attr("action");
                         $("#searchForm").attr("target", "_blank");
-                        $("#searchForm").attr("action", "${ctx}/akec/reportStandbook/exportListReportStandbook");
+                        $("#searchForm").attr("action", "${ctx}/akec/reportStandbook/exportListReportStandbook2");
                         $("#searchForm").submit();
                         $("#searchForm").attr("target", "_self");
                         $("#searchForm").attr("action", oldAction);
@@ -40,11 +40,11 @@
 		<ul class="ul-form">
 			<li><label>报台时间：</label>
 				<input name="beginCreateDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					   value="<fmt:formatDate value="${reportStandbook.beginCreateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					   onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/> -
+					   value="<fmt:formatDate value="${reportStandbook.beginCreateDate}" pattern="yyyy-MM-dd"/>"
+					   onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/> -
 				<input name="endCreateDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					   value="<fmt:formatDate value="${reportStandbook.endCreateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					   onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					   value="<fmt:formatDate value="${reportStandbook.endCreateDate}" pattern="yyyy-MM-dd"/>"
+					   onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 			</li>
 			<li><label>手术时间：</label>
 				<input name="beginOperateDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"

@@ -66,11 +66,7 @@ public class ReportStandbookController extends BaseController {
 	@RequestMapping(value = {"list", ""})
 	public String list(ReportStandbook reportStandbook, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<ReportStandbook> page = reportStandbookService.findPage(new Page<ReportStandbook>(request, response), reportStandbook);
-		List<ReportStandbook> rs=page.getList();
-		for (ReportStandbook r:rs
-		) {
-			 r.setSurgeryGrade(basedataDao.get(r.getSurgeryId()).getParamName());
-		}
+
 		Basedata b= new Basedata();
 		b.setStatus("1");
 		b.setBase(new BasedataType("518370AD648C42B79759D2B6DB04DF6C"));
@@ -91,6 +87,40 @@ public class ReportStandbookController extends BaseController {
 
 	@Autowired
 	private ReportStandbookProductDetailDao reportStandbookProductDetailDao;
+
+	@RequiresPermissions("akec:reportStandbook:view")
+	@RequestMapping("/exportListReportStandbook2")
+	public ReqResponse exportListReportStandbook2(HttpServletResponse response,ReportStandbook reportStandbook){
+		ReqResponse r=new ReqResponse();
+		List<DetailVo> result = reportStandbookService.excelList(reportStandbook);
+
+		try {
+			String fileName = "报台"+ DateUtils.getDate("yyyyMMdd")+".xls";
+
+			ServletOutputStream out = null;
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("items", result);
+			try {
+				response.setHeader("Expires", "0");
+				response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+				response.setHeader("Content-Disposition", "attachment; filename="+ Encodes.urlEncode(fileName));
+				response.setHeader("Pragma", "public");
+				response.setContentType("application/x-excel;charset=UTF-8");
+				out = response.getOutputStream();
+				JxlsTemplate.processTemplate("/reportStandbook.xls", out, params);
+				out.flush();
+				out.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		} catch (Exception e) {
+
+		}
+
+		return r;
+	}
+
 	@RequiresPermissions("akec:reportStandbook:view")
 	 @RequestMapping("/exportListReportStandbook")
     public ReqResponse exportListReportStandbook(HttpServletResponse response,ReportStandbook reportStandbook){
@@ -122,18 +152,22 @@ public class ReportStandbookController extends BaseController {
                     sellproduct.setIndividualcode(rd.getIndividualcode());
                     sellproduct.setProudctCode(rd.getProduct().getCode());
 
-					Sellproduct sellproduct2 = sellproductService.getByIndividualcode(sellproduct).get(0);
-					if(sellproduct2!=null){
-						if(StringUtils.isNotEmpty(sellproduct2.getComments())) {
-							sellproduct2.setComments(sellproduct2.getComments().contains("无报台返利")?"否":"是");
-						}
-						else{
-							sellproduct2.setComments("是");
-						}
-						rd.setSellproduct(sellproduct2);
-					}
-				else{
+					List<Sellproduct> sss=sellproductService.getByIndividualcode(sellproduct);
+					if(sss==null||sss.size()==0){
 						rd.setSellproduct(new Sellproduct());
+					}
+					else {
+						Sellproduct sellproduct2=sss.get(0);
+						if (sellproduct2 != null) {
+							if (StringUtils.isNotEmpty(sellproduct2.getComments())) {
+								sellproduct2.setComments(sellproduct2.getComments().contains("无报台返利") ? "否" : "是");
+							} else {
+								sellproduct2.setComments("是");
+							}
+							rd.setSellproduct(sellproduct2);
+						} else {
+							rd.setSellproduct(new Sellproduct());
+						}
 					}
                 }
 
@@ -187,18 +221,21 @@ public class ReportStandbookController extends BaseController {
 			Sellproduct sellproduct = new Sellproduct();
 			sellproduct.setIndividualcode(rd.getIndividualcode());
 			sellproduct.setProudctCode(rd.getProduct().getCode());
+            List<Sellproduct> ss=sellproductService.getByIndividualcode(sellproduct);
+            if(ss==null||ss.size()==0){
 
-			Sellproduct sellproduct2 = sellproductService.getByIndividualcode(sellproduct).get(0);
-			if(sellproduct2!=null){
-				if(StringUtils.isNotEmpty(sellproduct2.getComments())) {
-					sellproduct2.setComments(sellproduct2.getComments().contains("无报台返利")?"否":"是");
-				}
-				else{
-					sellproduct2.setComments("是");
-				}
-				rd.setSellproduct(sellproduct2);
 			}
-
+			else {
+				Sellproduct sellproduct2 = ss.get(0);
+				if (sellproduct2 != null) {
+					if (StringUtils.isNotEmpty(sellproduct2.getComments())) {
+						sellproduct2.setComments(sellproduct2.getComments().contains("无报台返利") ? "否" : "是");
+					} else {
+						sellproduct2.setComments("是");
+					}
+					rd.setSellproduct(sellproduct2);
+				}
+			}
 
 		}
 		reportStandbook.setUser(appUserService.get(reportStandbook.getUserId()));

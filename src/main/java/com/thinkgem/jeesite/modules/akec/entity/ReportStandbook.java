@@ -34,13 +34,23 @@ public class ReportStandbook extends DataEntity<ReportStandbook> {
 	private String userName;		// 报台人
 	private String userId;		// 报台人
 	private AppUser user;		// 报台人
+	private String dealerName2;		// 报台人单位
+	private String baseReportName;
 
-	public AppUser getUser() {
-		return user;
+	public String getBaseReportName() {
+		return baseReportName;
 	}
 
-	public void setUser(AppUser user) {
-		this.user = user;
+	public void setBaseReportName(String baseReportName) {
+		this.baseReportName = baseReportName;
+	}
+
+	public String getDealerName2() {
+		return dealerName2;
+	}
+
+	public void setDealerName2(String dealerName2) {
+		this.dealerName2 = dealerName2;
 	}
 
 	private String type;		// 报台类型
@@ -58,8 +68,46 @@ public class ReportStandbook extends DataEntity<ReportStandbook> {
 
 	private Date beginCreateDate;		// 开始 时间
 	private Date endCreateDate;		// 结束 时间
+
+
+
+	private String operateDate2;		// 报台时间
+	private String createDate2;		// 报台时间
+	private String createTime;		// 报台时间
+
+	public String getOperateDate2() {
+		return operateDate2;
+	}
+
+	public void setOperateDate2(String operateDate2) {
+		this.operateDate2 = operateDate2;
+	}
+
+	public String getCreateDate2() {
+		return createDate2;
+	}
+
+	public void setCreateDate2(String createDate2) {
+		this.createDate2 = createDate2;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
 	private boolean show;
 
+	public AppUser getUser() {
+		return user;
+	}
+
+	public void setUser(AppUser user) {
+		this.user = user;
+	}
 	public Date getBeginCreateDate() {
 		return beginCreateDate;
 	}

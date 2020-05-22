@@ -15,6 +15,7 @@
 		a.patient_sex AS "patientSex",
 		a.patient_age AS "patientAge",
 		a.surgery_id AS "surgeryId",
+		a.surgery_grade AS "surgeryGrade",
 		a.user_name AS "userName",
 		a.user_id AS "userId",
 		a.type AS "type",
@@ -42,6 +43,96 @@
 		<include refid="reportStandbookJoins"/>
 		WHERE a.id = #{id}
 	</select>
+
+
+
+	<select id="excelList" resultType="com.thinkgem.jeesite.modules.akec.entity.DetailVo">
+		with grade as (
+		SELECT b.id , STUFF(( SELECT  ','+ name+':'+convert(varchar(1),grade) FROM (SELECT   	d.id,
+		d.grade,
+		d.report_id,
+		d.grade_id,
+		g.name
+		FROM t_report_standbook_grade_detail d
+		LEFT OUTER JOIN t_grade g
+		ON d.grade_id = g.id) a
+		WHERE b.id = a.report_id FOR XML PATH('')),1 ,1, '')  grades
+		FROM t_report_standbook b
+		GROUP BY b.id
+		)
+		SELECT
+		a.id as id,
+		CONVERT(VARCHAR(10),a.create_date,120) createDate2,
+		CONVERT(VARCHAR(12),a.create_date,108 ) createTime,
+		CONVERT(VARCHAR(10),a.operate_date,120) operateDate2,
+		a.hospital_name as hospitalName,
+		a.province_name as provinceName,
+		a.city_name as cityName,
+		a.doctor_name as doctorName,
+		case a.patient_sex when '1' then '男' else '女' end patientSex,
+		a.patient_age as patientAge,
+		a.surgery_grade as  surgeryGrade,
+		a.user_name,
+		a.baseReportName,
+		a.dealerName as dealerName2,
+		case a.type when '1' then '直属/子公司销售员报台' else '经销商报台' end type,
+		case pd.is_record_unit when '1' then 1 else 0 end isRecordUnit,
+		a.suggest,
+		g.grades as comments2,
+		case a.status when '1' then '启用' else '禁用' end status,
+		pd.materialCode,
+		pd.materialDesc,
+		pd.materialSpeDesc,
+		pd.seriesName,
+		pd.individualcode,
+		pd.dealerCode,
+		pd.dealerName,
+		pd.saleType,
+		pd.comments
+		FROM t_report_standbook a
+
+		LEFT OUTER JOIN t_report_standbook_product_detail pd
+		on a.id = pd.report_id
+
+		LEFT OUTER JOIN grade g
+		ON a.id = g.id
+		<where>
+
+			<if test="beginOperateDate != null and endOperateDate != null and beginOperateDate != '' and endOperateDate != ''">
+				AND a.operate_date BETWEEN #{beginOperateDate} AND #{endOperateDate}
+			</if>
+			<if test="hospitalName != null and hospitalName != ''">
+				AND a.hospital_name = #{hospitalName}
+			</if>
+			<if test="provinceName != null and provinceName != ''">
+				AND a.province_name = #{provinceName}
+			</if>
+			<if test="cityName != null and cityName != ''">
+				AND a.city_name = #{cityName}
+			</if>
+			<if test="doctorName != null and doctorName != ''">
+				AND a.doctor_name = #{doctorName}
+			</if>
+			<if test="beginCreateDate!=null and beginCreateDate!=''">
+				AND CONVERT(VARCHAR(10),a.create_date,120) &gt;= #{beginCreateDate}
+			</if>
+			<if test="endCreateDate!=null and endCreateDate!=''">
+				AND CONVERT(VARCHAR(10),a.create_date,120) &lt;= #{endCreateDate}
+			</if>
+
+
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND a.user_name = #{userName}
+			</if>
+			<if test="dealerName != null and dealerName != ''">
+				AND d.name = #{dealerName}
+			</if>
+		</where>
+
+	</select>
 	
 	<select id="findList" resultType="ReportStandbook">
 		SELECT
@@ -67,9 +158,13 @@
 			<if test="doctorName != null and doctorName != ''">
 				AND a.doctor_name = #{doctorName}
 			</if>
-			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
-				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			<if test="beginCreateDate!=null and beginCreateDate!=''">
+				AND CONVERT(VARCHAR(10),a.create_date,120) &gt;= #{beginCreateDate}
 			</if>
+			<if test="endCreateDate!=null and endCreateDate!=''">
+				AND CONVERT(VARCHAR(10),a.create_date,120) &lt;= #{endCreateDate}
+			</if>
+
 
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
@@ -176,6 +271,7 @@
 			patient_sex,
 			patient_age,
 			surgery_id,
+			surgery_grade,
 			user_name,
 			user_id,
 			type,
@@ -185,6 +281,8 @@
 			suggest,
 			update_date,
 			update_admin_name,
+			dealerName,
+			baseReportName,
 			dealer_name
 		) VALUES (
 			#{id},
@@ -199,6 +297,7 @@
 			#{patientSex},
 			#{patientAge},
 			#{surgeryId},
+			#{surgeryGrade},
 			#{userName},
 			#{userId},
 			#{type},
@@ -208,6 +307,8 @@
 			#{suggest},
 			#{updateDate},
 			#{updateAdminName},
+			#{dealerName2},
+			#{baseReportName},
 			#{dealerName}
 		)
 	</insert>
@@ -225,14 +326,13 @@
 			patient_sex = #{patientSex},
 			patient_age = #{patientAge},
 			surgery_id = #{surgeryId},
-			user_name = #{userName},
-			user_id = #{userId},
-			type = #{type},
+			surgery_grade = #{surgeryGrade},
+
 			unit_count = #{unitCount},
 			status = #{status},
 			suggest = #{suggest},
-			update_date = #{updateDate},
-			dealer_name = #{dealerName}
+			update_date = #{updateDate}
+
 		WHERE id = #{id}
 	</update>
 

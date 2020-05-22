@@ -26,7 +26,17 @@
 		b.operate_date AS "report.operateDate",
 		b.hospital_name AS "report.hospitalName",
 		b.user_id AS "report.userId",
-		p.material_spe_desc AS "product.materialSpeDesc"
+		p.material_spe_desc AS "product.materialSpeDesc",
+
+		a.materialCode AS "materialCode",
+		a.materialDesc AS "materialDesc",
+			a.materialSpeDesc AS "materialSpeDesc",
+			a.seriesName AS "seriesName",
+			a.dealerCode AS "dealerCode",
+			a.dealerName AS "dealerName",
+			a.comments AS "comments",
+		a.saleType AS "saleType"
+
 	</sql>
 	
 	<sql id="reportStandbookProductDetailJoins">
@@ -97,7 +107,15 @@
 			is_verify_individualcode,
 			scan_code,
 			produce_date,
-			outdate
+			outdate,
+			materialCode,
+			materialDesc,
+			materialSpeDesc,
+			seriesName,
+			dealerCode,
+			dealerName,
+			comments,
+			saleType
 		) VALUES (
 			#{id},
 			#{report.id},
@@ -109,21 +127,21 @@
 			#{isVerifyIndividualcode},
 			#{scanCode},
 			#{produceDate},
-			#{outdate}
+			#{outdate},
+			#{materialCode},
+			#{materialDesc},
+			#{materialSpeDesc},
+			#{seriesName},
+			#{dealerCode},
+			#{dealerName},
+			#{comments},
+			#{saleType}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE t_report_standbook_product_detail SET 	
-			product_id = #{productId},
-			individualcode = #{individualcode},
-			integral = #{integral},
-			note = #{note},
-			is_record_unit = #{isRecordUnit},
-			is_verify_individualcode = #{isVerifyIndividualcode},
-			scan_code = #{scanCode},
-			produce_date = #{produceDate},
-			outdate = #{outdate}
+			integral = #{integral}
 		WHERE id = #{id}
 	</update>
 	

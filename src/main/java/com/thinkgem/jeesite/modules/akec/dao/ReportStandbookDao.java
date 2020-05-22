@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.akec.dao;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+import com.thinkgem.jeesite.modules.akec.entity.DetailVo;
 import com.thinkgem.jeesite.modules.akec.entity.ReportStandbook;
 
 import java.util.List;
@@ -18,4 +19,6 @@ import java.util.List;
 public interface ReportStandbookDao extends CrudDao<ReportStandbook> {
 
     List<ReportStandbook> queryListReportStandbook(ReportStandbook reportStandbook);
+
+    List<DetailVo> excelList(ReportStandbook reportStandbook);
 }
