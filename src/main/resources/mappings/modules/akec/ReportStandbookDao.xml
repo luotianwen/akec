@@ -97,7 +97,9 @@
 		LEFT OUTER JOIN grade g
 		ON a.id = g.id
 		<where>
-
+			<if test="userId !=null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
 			<if test="beginOperateDate != null and endOperateDate != null and beginOperateDate != '' and endOperateDate != ''">
 				AND a.operate_date BETWEEN #{beginOperateDate} AND #{endOperateDate}
 			</if>
@@ -164,7 +166,9 @@
 			<if test="endCreateDate!=null and endCreateDate!=''">
 				AND CONVERT(VARCHAR(10),a.create_date,120) &lt;= #{endCreateDate}
 			</if>
-
+			<if test="userId !=null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
 
 			<if test="status != null and status != ''">
 				AND a.status = #{status}

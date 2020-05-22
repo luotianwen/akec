@@ -414,7 +414,7 @@ public class AppController extends BaseController {
         List<DetailVo> result = reportStandbookService.excelList(reportStandbook);
 
         try {
-            String fileName = "报台"+ DateUtils.getDate("yyyyMMdd")+".xls";
+            String fileName =  DateUtils.getDate("yyyyMMdd")+".xls";
 
             ServletOutputStream out = null;
             Map<String, Object> params = new HashMap<String, Object>();
