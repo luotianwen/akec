@@ -394,7 +394,7 @@ public class AppController extends BaseController {
             else{
                 r2.setShow(true);
             }
-             r2.setSurgeryGrade(basedataDao.get(r2.getSurgeryId()).getParamName());
+
         }
         r.setData(result);
         return r;

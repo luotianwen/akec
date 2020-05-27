@@ -356,6 +356,7 @@
 		patient_sex AS "patientSex",
 		patient_age AS "patientAge",
 		surgery_id AS "surgeryId",
+		surgery_grade AS "surgeryGrade",
 		user_name AS "userName",
 		user_id AS "userId",
 		case  status when '1' then '启用' else '禁用' end status,
