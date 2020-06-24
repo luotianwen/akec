@@ -137,9 +137,9 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
     private RegionService regionService;
 	@Autowired
 	private AppUserService appUserService;
-	private static final String AKEC_TYPE = ",18370AD648C42B79759D2B6DB04DF6BB,1EDE364642A542428CE115CEB82B8132,B18370AD648C42B79759D2B6DB04DF6D,";
+	public static final String AKEC_TYPE = ",18370AD648C42B79759D2B6DB04DF6BB,1EDE364642A542428CE115CEB82B8132,B18370AD648C42B79759D2B6DB04DF6D,";
 
-	private static final String DEALER_TYPE = ",B18370AD648C42B79759D2B6DB04DF6B,B18370AD648C42B79759D2B6DB04DF6C,";
+	public static final String DEALER_TYPE = ",B18370AD648C42B79759D2B6DB04DF6B,B18370AD648C42B79759D2B6DB04DF6C,";
 
 	@Autowired
 	private BasedataDao basedataDao;
@@ -396,4 +396,15 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
     public List<DetailVo> excelList(ReportStandbook reportStandbook) {
 		return  dao.excelList(reportStandbook);
     }
+	@Transactional(readOnly = false)
+	public void save2(ReportStandbook reportStandbook) {
+		this.save(reportStandbook);
+		for (ReportStandbookProductDetail reportStandbookProductDetail : reportStandbook.getReportStandbookProductDetailList()){
+
+			reportStandbookProductDetail.setReport(reportStandbook);
+			reportStandbookProductDetail.preInsert();
+			reportStandbookProductDetailDao.insert(reportStandbookProductDetail);
+
+		}
+	}
 }

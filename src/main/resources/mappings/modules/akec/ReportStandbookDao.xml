@@ -26,7 +26,8 @@
 		a.update_date AS "updateDate",
 		a.update_admin_name AS "updateAdminName",
 		d.name AS "dealerName",
-
+        a.baseReportName,
+        a.dealerName AS "dealerName2",
 		a.patient_name AS "patientName"
 	</sql>
 	

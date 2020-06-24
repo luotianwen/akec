@@ -11,6 +11,7 @@ import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
@@ -43,7 +44,7 @@ public class ExportExcel {
 	/**
 	 * 工作表对象
 	 */
-	private Sheet sheet;
+	private SXSSFSheet sheet;
 	
 	/**
 	 * 样式列表
@@ -204,6 +205,7 @@ public class ExportExcel {
 			}else{
 				cell.setCellValue(headerList.get(i));
 			}
+			sheet.trackAllColumnsForAutoSizing();
 			sheet.autoSizeColumn(i);
 		}
 		for (int i = 0; i < headerList.size(); i++) {  

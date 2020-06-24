@@ -893,11 +893,23 @@ public class AppController extends BaseController {
     @ResponseBody
     public ReqResponse queryGetiReportStandbook(ReportStandbookProductDetail reportStandbookProductDetail){
         ReqResponse r=new ReqResponse();
+        if(StringUtils.isEmpty(reportStandbookProductDetail.getIndividualcode())){
+            r.setCode(1);
+            r.setMsg("输入个体码");
+            return r;
+        }
+
         List<ReportStandbookProductDetail> result= rspdao.findList(reportStandbookProductDetail);
         for (ReportStandbookProductDetail r2:result
         ) {
             AppUser appUser= appUserService.get(r2.getReport().getUserId());
-            r2.setRemarks(appUser.getBaseReportName()+"-"+appUser.getName());
+            if(appUser.getBaseReportName().equals("直属销售员")) {
+                r2.setRemarks(appUser.getBaseReportName() + "-" + appUser.getName());
+            }
+            else{
+                r2.setRemarks(appUser.getBaseReportName() );
+            }
+
             r2.getReport().setSurgeryGrade(basedataDao.get(r2.getReport().getSurgeryId()).getParamName());
         }
         r.setData(result);

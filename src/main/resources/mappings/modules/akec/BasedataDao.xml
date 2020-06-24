@@ -23,7 +23,35 @@
 		<include refid="basedataJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
+	<select id="getByName" resultType="Basedata">
+		SELECT
+		<include refid="basedataColumns"/>
+		FROM t_basedata a
+		<include refid="basedataJoins"/>
+		<where>
+
+			<if test="base != null and base.id != null and base.id != ''">
+				AND a.base_id = #{base.id}
+			</if>
+			<if test="paramCode != null and paramCode != ''">
+				AND a.param_code = #{paramCode}
+			</if>
+			<if test="paramName != null and paramName != ''">
+				AND a.param_name = #{paramName}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
 	<select id="findList" resultType="Basedata">
 		SELECT 
 			<include refid="basedataColumns"/>

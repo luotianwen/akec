@@ -6,6 +6,8 @@ package com.thinkgem.jeesite.modules.akec.service;
 import java.util.List;
 
 import com.thinkgem.jeesite.modules.akec.web.MD5Util;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +28,15 @@ public class AppUserService extends CrudService<AppUserDao, AppUser> {
 	public AppUser get(String id) {
 		return super.get(id);
 	}
-	
+	public AppUser get(User u) {
+		AppUser a=new AppUser();
+		a.setAccount(u.getLoginName());
+		List<AppUser>ls=this.findList(a);
+		if(ls==null||ls.size()==0){
+			return new AppUser();
+		}
+		return  ls.get(0);
+	}
 	public List<AppUser> findList(AppUser appUser) {
 		return super.findList(appUser);
 	}

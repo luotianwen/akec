@@ -31,7 +31,6 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/akec/reportStandbookOperation/">手术报数列表</a></li>
-		<shiro:hasPermission name="akec:reportStandbookOperation:edit"><li><a href="${ctx}/akec/reportStandbookOperation/form">手术报数添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="reportStandbookOperation" action="${ctx}/akec/reportStandbookOperation/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>

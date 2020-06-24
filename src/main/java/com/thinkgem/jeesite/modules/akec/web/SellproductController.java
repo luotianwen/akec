@@ -86,4 +86,11 @@ public class SellproductController extends BaseController {
 		addMessage(redirectAttributes, "同步所有已售产品信息成功");
 		return "redirect:"+Global.getAdminPath()+"/akec/sellproduct/?repage";
 	}
+	@RequiresPermissions("akec:sellproduct:edit")
+	@RequestMapping(value = "tbday")
+	public String tbday(RedirectAttributes redirectAttributes) {
+		sellproductService.tbtoday();
+		addMessage(redirectAttributes, "同步当天已售产品信息成功");
+		return "redirect:"+Global.getAdminPath()+"/akec/sellproduct/?repage";
+	}
 }

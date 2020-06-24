@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.akec.entity.Basedata;
 
+import java.util.List;
+
 /**
  * 常用参数DAO接口
  * @author 常用参数
@@ -14,5 +16,6 @@ import com.thinkgem.jeesite.modules.akec.entity.Basedata;
  */
 @MyBatisDao
 public interface BasedataDao extends CrudDao<Basedata> {
-	
+
+    List<Basedata> getByName(Basedata surgeryGrade);
 }

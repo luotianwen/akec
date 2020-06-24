@@ -12,13 +12,17 @@
                         $("#export").attr("disabled",true);
                         var oldAction = $("#searchForm").attr("action");
                         $("#searchForm").attr("target", "_blank");
-                        $("#searchForm").attr("action", "${ctx}/akec/reportStandbook/exportListReportStandbook2");
+                        $("#searchForm").attr("action", "${ctx}/akec/reportStandbook/exportjxsListReportStandbook");
                         $("#searchForm").submit();
                         $("#searchForm").attr("target", "_self");
                         $("#searchForm").attr("action", oldAction);
                     }
                 }, {buttonsFocus: 1});
                 top.$('.jbox-body .jbox-icon').css('top', '55px');
+            });
+            $("#btnImport").click(function(){
+                $.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true},
+                    bottomText:"导入文件不能超过5M，仅允许导入“xls”或“xlsx”格式文件！"});
             });
 		});
 		function page(n,s){
@@ -30,10 +34,18 @@
 	</script>
 </head>
 <body>
+<div id="importBox" class="hide">
+	<form id="importForm" action="${ctx}/akec/reportStandbook/import" method="post" enctype="multipart/form-data"
+		  class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
+		<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
+		<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
+		<a href="${ctx}/akec/reportStandbook/import/template">下载模板</a>
+	</form>
+</div>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/akec/reportStandbook/">报台信息列表</a></li>
+		<li class="active"><a href="${ctx}/akec/reportStandbook/jxslist">报台信息列表</a></li>
 	</ul>
-	<form:form id="searchForm" modelAttribute="reportStandbook" action="${ctx}/akec/reportStandbook/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="reportStandbook" action="${ctx}/akec/reportStandbook/jxslist" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
@@ -78,14 +90,10 @@
 					<form:options items="${surgeryIds}" itemLabel="paramName" itemValue="id" htmlEscape="false"/>
 				</form:select>
 			</li>
-			<li><label>报台人：</label>
-				<form:input path="userName" htmlEscape="false" maxlength="100" class="input-medium"/>
-			</li>
-			<li><label>报台人单位：</label>
-				<form:input path="dealerName" htmlEscape="false" maxlength="100" class="input-medium"/>
-			</li>
+
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
 				<input id="export" class="btn btn-primary" type="button" value="导出"/>
+				<input id="btnImport" class="btn btn-primary" type="button" value="导入"/>
 			</li>
 			<li class="clearfix"></li>
 		</ul>
@@ -103,8 +111,7 @@
 				<th  class="sort-column a.doctor_name">医生</th>
 				<th>患者年龄</th>
 				<th>患者性别</th>
-				<th  class="sort-column a.user_name">报台人</th>
-				<th>报台人单位</th>
+
 				<th>台数</th>
 				<th  class="sort-column a.surgery_id">手术类型</th>
 				<th>状态</th>
@@ -140,13 +147,7 @@
 						${reportStandbook.patientSex}
 				</td>
 
-				<td>
-						${reportStandbook.userName}
-				</td>
 
-				<td>
-						${reportStandbook.dealerName}
-				</td>
 
 				<td>
 						${reportStandbook.unitCount}
@@ -161,10 +162,10 @@
 				<td>
 						${fns:getDictLabel(reportStandbook.status, 'yes_no', '')}
 				</td>
-				<shiro:hasPermission name="akec:reportStandbook:edit"><td>
-    				<a href="${ctx}/akec/reportStandbook/form?id=${reportStandbook.id}">修改</a>
+				 <td>
+    				<a href="${ctx}/akec/reportStandbook/jxsform?id=${reportStandbook.id}">查看</a>
 					<%--<a href="${ctx}/akec/reportStandbook/delete?id=${reportStandbook.id}" onclick="return confirmx('确认要删除该报台信息吗？', this.href)">删除</a>--%>
-				</td></shiro:hasPermission>
+				</td>
 			</tr>
 		</c:forEach>
 		</tbody>
