@@ -53,7 +53,7 @@ public class ReportDStandbook extends DataEntity<ReportDStandbook> {
 		super(id);
 	}
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	public Date getOperateDate() {
 		return operateDate;
 	}

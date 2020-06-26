@@ -56,56 +56,35 @@ public class ReportDStandbookService extends CrudService<ReportDStandbookDao, Re
 	@Transactional(readOnly = false)
 	public void save(ReportDStandbook reportDStandbook) {
 		super.save(reportDStandbook);
+		reportDStandbookGradeDetailDao.delete( new ReportDStandbookGradeDetail(reportDStandbook));
 		for (ReportDStandbookGradeDetail reportDStandbookGradeDetail : reportDStandbook.getReportDStandbookGradeDetailList()){
-			if (reportDStandbookGradeDetail.getId() == null){
-				continue;
-			}
-			if (ReportDStandbookGradeDetail.DEL_FLAG_NORMAL.equals(reportDStandbookGradeDetail.getDelFlag())){
-				if (StringUtils.isBlank(reportDStandbookGradeDetail.getId())){
-					reportDStandbookGradeDetail.setReportId(reportDStandbook);
-					reportDStandbookGradeDetail.preInsert();
-					reportDStandbookGradeDetailDao.insert(reportDStandbookGradeDetail);
-				}else{
-					reportDStandbookGradeDetail.preUpdate();
-					reportDStandbookGradeDetailDao.update(reportDStandbookGradeDetail);
-				}
-			}else{
-				reportDStandbookGradeDetailDao.delete(reportDStandbookGradeDetail);
-			}
+
+
+
+			reportDStandbookGradeDetail.setReportId(reportDStandbook);
+
+			reportDStandbookGradeDetail.preInsert();
+			reportDStandbookGradeDetailDao.insert(reportDStandbookGradeDetail);
 		}
+		reportDStandbookImageDetailDao.delete(new ReportDStandbookImageDetail(reportDStandbook));
 		for (ReportDStandbookImageDetail reportDStandbookImageDetail : reportDStandbook.getReportDStandbookImageDetailList()){
-			if (reportDStandbookImageDetail.getId() == null){
-				continue;
-			}
-			if (ReportDStandbookImageDetail.DEL_FLAG_NORMAL.equals(reportDStandbookImageDetail.getDelFlag())){
-				if (StringUtils.isBlank(reportDStandbookImageDetail.getId())){
+
+
 					reportDStandbookImageDetail.setReportId(reportDStandbook);
+
 					reportDStandbookImageDetail.preInsert();
 					reportDStandbookImageDetailDao.insert(reportDStandbookImageDetail);
-				}else{
-					reportDStandbookImageDetail.preUpdate();
-					reportDStandbookImageDetailDao.update(reportDStandbookImageDetail);
-				}
-			}else{
-				reportDStandbookImageDetailDao.delete(reportDStandbookImageDetail);
-			}
+
 		}
+
+		reportDStandbookProductDetailDao.delete(new ReportDStandbookProductDetail(reportDStandbook));
 		for (ReportDStandbookProductDetail reportDStandbookProductDetail : reportDStandbook.getReportDStandbookProductDetailList()){
-			if (reportDStandbookProductDetail.getId() == null){
-				continue;
-			}
-			if (ReportDStandbookProductDetail.DEL_FLAG_NORMAL.equals(reportDStandbookProductDetail.getDelFlag())){
-				if (StringUtils.isBlank(reportDStandbookProductDetail.getId())){
+
+
 					reportDStandbookProductDetail.setReportId(reportDStandbook);
 					reportDStandbookProductDetail.preInsert();
 					reportDStandbookProductDetailDao.insert(reportDStandbookProductDetail);
-				}else{
-					reportDStandbookProductDetail.preUpdate();
-					reportDStandbookProductDetailDao.update(reportDStandbookProductDetail);
-				}
-			}else{
-				reportDStandbookProductDetailDao.delete(reportDStandbookProductDetail);
-			}
+
 		}
 	}
 	

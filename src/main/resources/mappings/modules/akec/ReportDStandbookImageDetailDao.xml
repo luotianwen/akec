@@ -5,7 +5,7 @@
 	<sql id="reportDStandbookImageDetailColumns">
 		a.id AS "id",
 		a.report_img_url AS "reportImgUrl",
-		a.report_id AS "reportId",
+		a.report_id AS "reportId.id",
 		a.add_date AS "addDate"
 	</sql>
 	
@@ -29,7 +29,7 @@
 		<where>
 			
 			<if test="reportId != null and reportId != ''">
-				AND a.report_id = #{reportId}
+				AND a.report_id = #{reportId.id}
 			</if>
 			<if test="addDate != null and addDate != ''">
 				AND a.add_date = #{addDate}
@@ -70,7 +70,7 @@
 		) VALUES (
 			#{id},
 			#{reportImgUrl},
-			#{reportId},
+			#{reportId.id},
 			#{addDate}
 		)
 	</insert>
@@ -78,7 +78,7 @@
 	<update id="update">
 		UPDATE t_report_d_standbook_image_detail SET 	
 			report_img_url = #{reportImgUrl},
-			report_id = #{reportId},
+			report_id = #{reportId.id},
 			add_date = #{addDate}
 		WHERE id = #{id}
 	</update>
@@ -90,7 +90,7 @@
 				WHERE id = #{id}
 			</when>
 			<otherwise>
-				WHERE report_id = #{reportId}
+				WHERE report_id = #{reportId.id}
 			</otherwise>
 		</choose>
 	</update>

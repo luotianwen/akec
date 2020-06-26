@@ -25,7 +25,17 @@ public class ReportDStandbookProductDetail extends DataEntity<ReportDStandbookPr
 	private String scanCode;		// scan_code
 	private String produceDate;		// produce_date
 	private String outdate;		// outdate
-	
+
+	private Product product;		// 产品ID（参照产品表主键）
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
 	public ReportDStandbookProductDetail() {
 		super();
 	}

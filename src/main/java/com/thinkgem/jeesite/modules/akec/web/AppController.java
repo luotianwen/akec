@@ -678,6 +678,27 @@ public class AppController extends BaseController {
     /**
      *
 
+     * @Description: TODO(这里用一句话描述这个方法的作用)  待提交报台删除
+
+     * @throws
+     */
+    @RequestMapping("/delReportDStandbook")
+    @ResponseBody
+    public ReqResponse delReportDStandbook(ReportDStandbook reportStandbook){
+        ReqResponse r=new ReqResponse();
+        try {
+            reportDStandbookService.delete(reportStandbook);
+        }catch (Exception e){
+            log.error("待提交报台删除失败"+reportStandbook.getId());
+            r.setCode(1);
+            r.setMsg("删除失败");
+            return r;
+        }
+        return r;
+    }
+    /**
+     *
+
      * @Description: TODO(这里用一句话描述这个方法的作用)  待提交报台查询
 
      * @throws
@@ -687,7 +708,6 @@ public class AppController extends BaseController {
     public ReqResponse getReportDStandbook(ReportDStandbook reportStandbook){
         ReqResponse r=new ReqResponse();
         ReportDStandbook reportStandbook2= reportDStandbookService.get(reportStandbook.getId());
-        reportStandbook2.setSurgeryGrade(basedataDao.get(reportStandbook2.getSurgeryId()).getParamName());
         r.setData(reportStandbook2);
         return r;
     }

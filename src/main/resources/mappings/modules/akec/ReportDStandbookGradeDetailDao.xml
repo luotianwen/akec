@@ -5,7 +5,7 @@
 	<sql id="reportDStandbookGradeDetailColumns">
 		a.id AS "id",
 		a.grade AS "grade",
-		a.report_id AS "reportId",
+		a.report_id AS "reportId.id",
 		a.grade_id AS "gradeId",
         g.name AS  gradeName
 	</sql>
@@ -32,7 +32,7 @@
 		<where>
 			
 			<if test="reportId != null and reportId != ''">
-				AND a.report_id = #{reportId}
+				AND a.report_id = #{reportId.id}
 			</if>
 		</where>
 		<choose>
@@ -70,7 +70,7 @@
 		) VALUES (
 			#{id},
 			#{grade},
-			#{reportId},
+			#{reportId.id},
 			#{gradeId}
 		)
 	</insert>
@@ -78,7 +78,7 @@
 	<update id="update">
 		UPDATE t_report_d_standbook_grade_detail SET 	
 			grade = #{grade},
-			report_id = #{reportId},
+			report_id = #{reportId.id},
 			grade_id = #{gradeId}
 		WHERE id = #{id}
 	</update>
@@ -90,7 +90,7 @@
 				WHERE id = #{id}
 			</when>
 			<otherwise>
-				WHERE report_id = #{reportId}
+				WHERE report_id = #{reportId.id}
 			</otherwise>
 		</choose>
 	</update>
