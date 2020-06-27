@@ -114,6 +114,9 @@
 		FROM  [192.168.1.6].[SBO_AKYC].[dbo].[v_sellproduct]  a
 where
          CONVERT(VARCHAR(10),updatedate,120)=CONVERT(VARCHAR(10),GETDATE(),120)
+         OR
+CONVERT(VARCHAR(10),updatedate,120)=CONVERT(VARCHAR(10),dateadd(day, -1, getdate()),120)
+
 	</select>
 	<select id="findAllList" resultType="Sellproduct">
 		SELECT 
