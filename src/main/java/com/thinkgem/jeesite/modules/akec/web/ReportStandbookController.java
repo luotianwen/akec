@@ -155,7 +155,9 @@ public class ReportStandbookController extends BaseController {
         reportStandbook.setUserId(a.getId());
         ReqResponse r = new ReqResponse();
         List<DetailVo> result = reportStandbookService.excelList(reportStandbook);
-
+        if(result.size()>60000){
+            throw new Exception("数据超60000太多");
+        }
         try {
             String fileName = "报台" + DateUtils.getDate("yyyyMMdd") + ".xls";
 
@@ -553,10 +555,12 @@ public class ReportStandbookController extends BaseController {
 
     @RequiresPermissions("akec:reportStandbook:view")
     @RequestMapping("/exportListReportStandbook2")
-    public ReqResponse exportListReportStandbook2(HttpServletResponse response, ReportStandbook reportStandbook) {
+    public ReqResponse exportListReportStandbook2(HttpServletResponse response, ReportStandbook reportStandbook) throws Exception {
         ReqResponse r = new ReqResponse();
         List<DetailVo> result = reportStandbookService.excelList(reportStandbook);
-
+         if(result.size()>60000){
+             throw new Exception("数据超60000太多");
+         }
         try {
             String fileName = "报台" + DateUtils.getDate("yyyyMMdd") + ".xls";
 

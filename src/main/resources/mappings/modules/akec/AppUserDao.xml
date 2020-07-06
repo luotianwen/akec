@@ -49,6 +49,13 @@
 				AND a.name LIKE 
 					  '%'+#{name}+'%'
 			</if>
+			<if test="dealerName != null and dealerName != ''">
+				AND ( a.dealer_name LIKE
+				'%'+#{dealerName}+'%'
+				OR a.register_dealer_name LIKE
+				'%'+#{dealerName}+'%'
+				)
+			</if>
 			<if test="dealerId != null and dealerId != ''">
 				AND a.dealer_id = #{dealerId}
 			</if>

@@ -50,7 +50,7 @@
 				<form:input path="name" htmlEscape="false" maxlength="20" class="input-medium"/>
 			</li>
 			<li><label>经销商：</label>
-				<form:input path="dealerId" htmlEscape="false" maxlength="32" class="input-medium"/>
+				<form:input path="dealerName" htmlEscape="false" maxlength="32" class="input-medium"/>
 			</li>
 			<li><label>状态：</label>
 				<form:select path="auditStatus" class="input-medium">
