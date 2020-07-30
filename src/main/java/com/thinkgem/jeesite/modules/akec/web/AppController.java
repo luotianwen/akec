@@ -384,6 +384,7 @@ public class AppController extends BaseController {
     @ResponseBody
     public ReqResponse queryListReportStandbook(ReportStandbook reportStandbook){
         ReqResponse r=new ReqResponse();
+
         List<ReportStandbook> result = reportStandbookService.queryListReportStandbook(reportStandbook);
 
         for (ReportStandbook r2:result
@@ -665,6 +666,7 @@ public class AppController extends BaseController {
     @ResponseBody
     public ReqResponse queryListReportDStandbook(ReportDStandbook reportStandbook){
         ReqResponse r=new ReqResponse();
+
         List<ReportDStandbook> result = reportDStandbookService.findList(reportStandbook);
 
         for (ReportDStandbook r2:result
@@ -721,6 +723,7 @@ public class AppController extends BaseController {
     @RequestMapping("/saveReportDStandbook")
     @ResponseBody
     public ReqResponse saveReportDStandbook(ReportDStandbook reportStandbook) {
+        reportStandbook.setUser(new AppUser(reportStandbook.getUserId()));
         //ReportStandbook reportStandbook= JSON.parseObject(datas,ReportStandbook.class);
         ReqResponse r=new ReqResponse();
                 reportDStandbookService.save(reportStandbook);

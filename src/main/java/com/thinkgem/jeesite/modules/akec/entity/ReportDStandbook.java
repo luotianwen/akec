@@ -33,7 +33,8 @@ public class ReportDStandbook extends DataEntity<ReportDStandbook> {
 	private String surgeryId;		// surgery_id
 	private String surgeryGrade;		// surgery_grade
 	private String userName;		// user_name
-	private User user;		// user_id
+	private AppUser user;		// user_id
+	private String userId;
 	private String type;		// type
 	private String unitCount;		// unit_count
 	private String status;		// status
@@ -44,7 +45,15 @@ public class ReportDStandbook extends DataEntity<ReportDStandbook> {
 	private List<ReportDStandbookGradeDetail> reportDStandbookGradeDetailList = Lists.newArrayList();		// 子表列表
 	private List<ReportDStandbookImageDetail> reportDStandbookImageDetailList = Lists.newArrayList();		// 子表列表
 	private List<ReportDStandbookProductDetail> reportDStandbookProductDetailList = Lists.newArrayList();		// 子表列表
-	
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
 	public ReportDStandbook() {
 		super();
 	}
@@ -169,11 +178,11 @@ public class ReportDStandbook extends DataEntity<ReportDStandbook> {
 		this.userName = userName;
 	}
 	
-	public User getUser() {
+	public AppUser getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(AppUser user) {
 		this.user = user;
 	}
 	

@@ -31,7 +31,7 @@
 	</sql>
 	
 	<sql id="reportDStandbookJoins">
-		LEFT JOIN sys_user u15 ON u15.id = a.user_id
+		LEFT JOIN t_user u15 ON u15.id = a.user_id
 	</sql>
     
 	<select id="get" resultType="ReportDStandbook">
@@ -48,7 +48,10 @@
 		FROM t_report_d_standbook a
 		<include refid="reportDStandbookJoins"/>
 		<where>
-			
+			<if test="userId !=null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -66,7 +69,10 @@
 		FROM t_report_d_standbook a
 		<include refid="reportDStandbookJoins"/>
 		<where>
-			
+			<if test="userId !=null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+
 		</where>		
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
