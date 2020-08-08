@@ -17,7 +17,8 @@
 		a.proudct_code AS "proudctCode",
 		a.material_code AS "materialCode",
 		a.comments AS "comments",
-		a.sale_type AS "saleType"
+		a.sale_type AS "saleType",
+		a.priceAfVAT AS "priceAfVAT"
 	</sql>
 	
 	<sql id="sellproductJoins">
@@ -89,7 +90,8 @@
 		a.product_code AS "proudctCode",
 		a.material_code AS "materialCode",
 		a.comments AS "comments",
-		a.sale_type AS "saleType"
+		a.sale_type AS "saleType",
+		priceAfVAT
 		FROM  [192.168.1.6].[SBO_AKYC].[dbo].[v_sellproduct]  a
 
 	</select>
@@ -110,7 +112,8 @@
 		a.product_code AS "proudctCode",
 		a.material_code AS "materialCode",
 		a.comments AS "comments",
-		a.sale_type AS "saleType"
+		a.sale_type AS "saleType",
+		priceAfVAT
 		FROM  [192.168.1.6].[SBO_AKYC].[dbo].[v_sellproduct]  a
 where
          CONVERT(VARCHAR(10),updatedate,120)=CONVERT(VARCHAR(10),GETDATE(),120)
@@ -151,7 +154,8 @@ CONVERT(VARCHAR(10),updatedate,120)=CONVERT(VARCHAR(10),dateadd(day, -1, getdate
 			proudct_code,
 			material_code,
 			comments,
-			sale_type
+			sale_type,
+			priceAfVAT
 		) VALUES (
 			#{materialDesc},
 			#{barCode},
@@ -167,7 +171,8 @@ CONVERT(VARCHAR(10),updatedate,120)=CONVERT(VARCHAR(10),dateadd(day, -1, getdate
 			#{proudctCode},
 			#{materialCode},
 			#{comments},
-			#{saleType}
+			#{saleType},
+			#{priceAfVAT}
 		)
 	</insert>
 	
@@ -187,7 +192,8 @@ CONVERT(VARCHAR(10),updatedate,120)=CONVERT(VARCHAR(10),dateadd(day, -1, getdate
 			proudct_code = #{proudctCode},
 			material_code = #{materialCode},
 			comments = #{comments},
-			sale_type = #{saleType}
+			sale_type = #{saleType},
+			priceAfVAT=#{priceAfVAT}
 		WHERE id = #{id}
 	</update>
 	

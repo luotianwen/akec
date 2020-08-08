@@ -155,6 +155,10 @@ public class ReportStandbookController extends BaseController {
         reportStandbook.setUserId(a.getId());
         ReqResponse r = new ReqResponse();
         List<DetailVo> result = reportStandbookService.excelList(reportStandbook);
+        for (DetailVo v:result
+             ) {
+            v.setPriceAfVAT("");
+        }
         if(result.size()>60000){
             throw new Exception("数据超60000太多");
         }
@@ -417,7 +421,7 @@ public class ReportStandbookController extends BaseController {
                         }
                         Sellproduct sellProduct = sellProducts.get(0);
 
-
+                        product.setPriceAfVAT(sellProduct.getPriceAfVAT());
                         product.setSeriesName(sellProduct.getSeries());
                         product.setDealerCode(sellProduct.getDealerCode());
                         product.setDealerName(sellProduct.getDealerName());

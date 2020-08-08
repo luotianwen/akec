@@ -413,7 +413,10 @@ public class AppController extends BaseController {
     public ReqResponse exportListReportStandbook(HttpServletResponse response,ReportStandbook reportStandbook){
         ReqResponse r=new ReqResponse();
         List<DetailVo> result = reportStandbookService.excelList(reportStandbook);
-
+        for (DetailVo v:result
+        ) {
+            v.setPriceAfVAT("");
+        }
         try {
             String fileName =  DateUtils.getDate("yyyyMMdd")+".xls";
 
@@ -466,7 +469,10 @@ public class AppController extends BaseController {
     @ResponseBody
     public ReqResponse saveReportStandbook(ReportStandbook reportStandbook) {
         //ReportStandbook reportStandbook= JSON.parseObject(datas,ReportStandbook.class);
-        ReqResponse r=reportStandbookService.saveReportStandbook(reportStandbook);
+        ReqResponse r =null;
+        synchronized (this) {
+           r= reportStandbookService.saveReportStandbook(reportStandbook);
+        }
         return r;
     }
     @Autowired

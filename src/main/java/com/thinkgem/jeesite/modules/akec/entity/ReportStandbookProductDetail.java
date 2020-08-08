@@ -38,7 +38,15 @@ public class ReportStandbookProductDetail extends DataEntity<ReportStandbookProd
 	private String dealerName;
 	private String comments;
 	private String saleType;
+	private String priceAfVAT;    //单价
 
+	public String getPriceAfVAT() {
+		return priceAfVAT;
+	}
+
+	public void setPriceAfVAT(String priceAfVAT) {
+		this.priceAfVAT = priceAfVAT;
+	}
 	public String getMaterialCode() {
 		return materialCode;
 	}

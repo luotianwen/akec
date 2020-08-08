@@ -35,7 +35,8 @@
 			a.dealerCode AS "dealerCode",
 			a.dealerName AS "dealerName",
 			a.comments AS "comments",
-		a.saleType AS "saleType"
+		a.saleType AS "saleType",
+		a.priceAfVAT AS "priceAfVAT"
 
 	</sql>
 	
@@ -115,7 +116,8 @@
 			dealerCode,
 			dealerName,
 			comments,
-			saleType
+			saleType,
+			priceAfVAT
 		) VALUES (
 			#{id},
 			#{report.id},
@@ -135,7 +137,8 @@
 			#{dealerCode},
 			#{dealerName},
 			#{comments},
-			#{saleType}
+			#{saleType},
+			#{priceAfVAT}
 		)
 	</insert>
 	

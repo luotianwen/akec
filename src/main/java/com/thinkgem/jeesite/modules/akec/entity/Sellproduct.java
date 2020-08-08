@@ -30,7 +30,16 @@ public class Sellproduct extends DataEntity<Sellproduct> {
 	private String materialCode;		// 材料编码
 	private String comments;		// 备注
 	private String saleType;		// 销售类型
-	
+	private String priceAfVAT;    //单价
+
+	public String getPriceAfVAT() {
+		return priceAfVAT;
+	}
+
+	public void setPriceAfVAT(String priceAfVAT) {
+		this.priceAfVAT = priceAfVAT;
+	}
+
 	public Sellproduct() {
 		super();
 	}

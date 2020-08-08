@@ -89,7 +89,8 @@
 		pd.dealerCode,
 		pd.dealerName,
 		pd.saleType,
-		pd.comments
+		pd.comments,
+		pd.priceAfVAT
 		FROM t_report_standbook a
 
 		LEFT OUTER JOIN t_report_standbook_product_detail pd

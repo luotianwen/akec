@@ -261,7 +261,7 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 				Sellproduct sellProduct=sellProducts.get(0);
 
 
-
+				product.setPriceAfVAT(sellProduct.getPriceAfVAT());
 				product.setSeriesName(sellProduct.getSeries());
 				product.setDealerCode(sellProduct.getDealerCode());
 				product.setDealerName(sellProduct.getDealerName());
