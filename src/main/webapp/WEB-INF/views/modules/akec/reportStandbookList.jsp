@@ -20,6 +20,21 @@
                 }, {buttonsFocus: 1});
                 top.$('.jbox-body .jbox-icon').css('top', '55px');
             });
+            $("#exportListReportStandbookreport").click(function () {
+                top.$.jBox.confirm("确认要导出数据吗？", "系统提示 数据量比较大稍等片刻", function (v, h, f) {
+                    if (v == "ok") {
+                        $("#export").attr("disabled",true);
+                        var oldAction = $("#searchForm").attr("action");
+                        $("#searchForm").attr("target", "_blank");
+                        $("#searchForm").attr("action", "${ctx}/akec/reportStandbook/exportListReportStandbookreport");
+                        $("#searchForm").submit();
+                        $("#searchForm").attr("target", "_self");
+                        $("#searchForm").attr("action", oldAction);
+                    }
+                }, {buttonsFocus: 1});
+                top.$('.jbox-body .jbox-icon').css('top', '55px');
+            });
+
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -86,6 +101,9 @@
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>
 				<input id="export" class="btn btn-primary" type="button" value="导出"/>
+				<shiro:hasPermission name="akec:reportStandbook:report">
+				<input id="exportListReportStandbookreport" class="btn btn-primary" type="button" value="导出带价格的"/>
+				</shiro:hasPermission>
 			</li>
 			<li class="clearfix"></li>
 		</ul>

@@ -556,7 +556,40 @@ public class ReportStandbookController extends BaseController {
 
     @Autowired
     private ReportStandbookProductDetailDao reportStandbookProductDetailDao;
+    @RequiresPermissions("akec:reportStandbook:report")
+    @RequestMapping("/exportListReportStandbookreport")
+    public ReqResponse exportListReportStandbookreport(HttpServletResponse response, ReportStandbook reportStandbook) throws Exception {
+        ReqResponse r = new ReqResponse();
+        List<DetailVo> result = reportStandbookService.excelList(reportStandbook);
+        if(result.size()>60000){
+            throw new Exception("数据超60000太多");
+        }
+        try {
+            String fileName = "报台" + DateUtils.getDate("yyyyMMdd") + ".xls";
 
+            ServletOutputStream out = null;
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("items", result);
+            try {
+                response.setHeader("Expires", "0");
+                response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+                response.setHeader("Content-Disposition", "attachment; filename=" + Encodes.urlEncode(fileName));
+                response.setHeader("Pragma", "public");
+                response.setContentType("application/x-excel;charset=UTF-8");
+                out = response.getOutputStream();
+                JxlsTemplate.processTemplate("/reportStandbookreport.xls", out, params);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        } catch (Exception e) {
+
+        }
+
+        return r;
+    }
     @RequiresPermissions("akec:reportStandbook:view")
     @RequestMapping("/exportListReportStandbook2")
     public ReqResponse exportListReportStandbook2(HttpServletResponse response, ReportStandbook reportStandbook) throws Exception {
