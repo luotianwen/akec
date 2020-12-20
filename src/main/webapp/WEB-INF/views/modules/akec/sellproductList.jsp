@@ -74,7 +74,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="sellproduct">
 			<tr>
-				<td><a href="${ctx}/akec/sellproduct/form?id=${sellproduct.id}">
+				<td><a href="${ctx}/akec/sellproduct/form?id=${sellproduct.individualcode}">
 					${sellproduct.materialDesc}
 				</a></td>
 				<td>

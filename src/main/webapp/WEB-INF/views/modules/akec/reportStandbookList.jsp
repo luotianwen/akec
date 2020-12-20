@@ -181,7 +181,7 @@
 				</td>
 				<shiro:hasPermission name="akec:reportStandbook:edit"><td>
     				<a href="${ctx}/akec/reportStandbook/form?id=${reportStandbook.id}">修改</a>
-					<%--<a href="${ctx}/akec/reportStandbook/delete?id=${reportStandbook.id}" onclick="return confirmx('确认要删除该报台信息吗？', this.href)">删除</a>--%>
+					<a href="${ctx}/akec/reportStandbook/delete?id=${reportStandbook.id}" onclick="return confirmx('确认要删除该报台信息吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

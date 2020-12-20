@@ -39,7 +39,7 @@
 			<include refid="sellproductColumns"/>
 		FROM t_sellproduct a
 		<include refid="sellproductJoins"/>
-		WHERE a.id = #{id}
+		WHERE a.individualcode = #{id}
 	</select>
 	
 	<select id="findList" resultType="Sellproduct">
