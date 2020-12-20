@@ -237,7 +237,7 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 			if("1".equals(isVerifyindivualcode)){
 				Product productVo  = productService.get(product.getProductId());
 
-
+				product.setIntegral(productVo.getIntegral());
 				product.setMaterialCode(productVo.getMaterialCode());
 				product.setMaterialDesc(productVo.getMaterialDesc());
 				product.setMaterialSpeDesc(productVo.getMaterialSpeDesc());
@@ -265,7 +265,11 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 				product.setSeriesName(sellProduct.getSeries());
 				product.setDealerCode(sellProduct.getDealerCode());
 				product.setDealerName(sellProduct.getDealerName());
-				product.setComments(sellProduct.getComments().contains("无报台返利")?"否":"是");
+				if(StringUtils.isNotEmpty(sellProduct.getComments())) {
+					product.setComments(sellProduct.getComments().contains("无报台返利") ? "否" : "是");
+				}else{
+					product.setComments("是");
+				}
 				product.setSaleType(sellProduct.getSaleType());
 
 
@@ -407,4 +411,12 @@ public class ReportStandbookService extends CrudService<ReportStandbookDao, Repo
 
 		}
 	}
+
+
+	@Transactional(readOnly = false)
+	public void deletegeti(ReportStandbookProductDetail reportStandbook) {
+
+		reportStandbookProductDetailDao.delete(reportStandbook);
+	}
+
 }

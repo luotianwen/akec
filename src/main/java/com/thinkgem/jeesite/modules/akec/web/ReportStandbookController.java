@@ -766,5 +766,11 @@ public class ReportStandbookController extends BaseController {
         addMessage(redirectAttributes, "删除报台信息成功");
         return "redirect:" + Global.getAdminPath() + "/akec/reportStandbook/?repage";
     }
-
+    @RequiresPermissions("akec:reportStandbook:edit")
+    @RequestMapping(value = "deletegeti")
+    public String deletegeti(ReportStandbookProductDetail reportStandbook, RedirectAttributes redirectAttributes) {
+        reportStandbookService.deletegeti(reportStandbook);
+        addMessage(redirectAttributes, "删除报台明细信息成功");
+        return "redirect:" + Global.getAdminPath() + "/akec/reportStandbook/queryGetiReportStandbook?repage";
+    }
 }
