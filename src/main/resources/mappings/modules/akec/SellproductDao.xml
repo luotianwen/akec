@@ -188,12 +188,12 @@ CONVERT(VARCHAR(10),updatedate,120)=CONVERT(VARCHAR(10),dateadd(day, -1, getdate
 			dealer_name = #{dealerName},
 			business_dealer_code = #{businessDealerCode},
 			business_dealer_name = #{businessDealerName},
-			proudct_code = #{proudctCode},
 			material_code = #{materialCode},
 			comments = #{comments},
 			sale_type = #{saleType},
 			priceAfVAT=#{priceAfVAT}
 		WHERE individualcode = #{id}
+		and proudct_code= #{proudctCode}
 	</update>
 	
 	<update id="delete">
