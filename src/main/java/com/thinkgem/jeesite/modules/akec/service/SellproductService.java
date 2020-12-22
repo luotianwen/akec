@@ -60,11 +60,16 @@ public class SellproductService extends CrudService<SellproductDao, Sellproduct>
 			if(ss==null||ss.size()==0){
 				super.save(p);
 			}
+			else{
+				p.setIsNewRecord(false);
+				p.setId(p.getIndividualcode());
+				super.save(p);
+			}
 		}
     }
 	@Transactional(readOnly = false)
 	public void tbtoday() {
-		List<Sellproduct>ds=dao.tbtoday();
+		List<Sellproduct>ds=dao.tball();
 		for (Sellproduct p:ds
 		) {
 			Sellproduct p1=new Sellproduct();
@@ -72,6 +77,10 @@ public class SellproductService extends CrudService<SellproductDao, Sellproduct>
 			p1.setProudctCode(p.getProudctCode());
 			List ss=dao.findList(p1);
 			if(ss==null||ss.size()==0){
+				super.save(p);
+			}else{
+				p.setIsNewRecord(false);
+				p.setId(p.getIndividualcode());
 				super.save(p);
 			}
 		}
