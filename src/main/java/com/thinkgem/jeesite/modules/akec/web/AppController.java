@@ -1,22 +1,22 @@
 package com.thinkgem.jeesite.modules.akec.web;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.utils.*;
 import com.thinkgem.jeesite.common.utils.excel.JxlsTemplate;
 import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.modules.akec.dao.*;
+import com.thinkgem.jeesite.modules.akec.dao.BasedataDao;
+import com.thinkgem.jeesite.modules.akec.dao.ReportStandbookGradeDetailDao;
+import com.thinkgem.jeesite.modules.akec.dao.ReportStandbookOperationDetailDao;
+import com.thinkgem.jeesite.modules.akec.dao.ReportStandbookProductDetailDao;
 import com.thinkgem.jeesite.modules.akec.entity.*;
 import com.thinkgem.jeesite.modules.akec.service.*;
 import com.thinkgem.jeesite.modules.akec.utils.SmsUtils;
-import com.thinkgem.jeesite.modules.cms.entity.Site;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
